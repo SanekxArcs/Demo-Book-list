@@ -1,0 +1,234 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "title": "Journey Through Time1",
+      "author": "Alex Turner1",
+      "category": "Science Fiction1",
+      "isbn": "97812345678901",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": "24th August 2023, 5:34",
+      "isActive": false
+    },
+    {
+      "id": 3,
+      "title": "Forgotten Realms",
+      "author": "Michael Johnson",
+      "category": "Fantasy",
+      "isbn": "9780123456789",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 4,
+      "title": "Ripples of Destiny",
+      "author": "Emily Roberts",
+      "category": "Romance",
+      "isbn": "9780987654321",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "title": "Pathways to Success",
+      "author": "David Wilson",
+      "category": "Self-Help",
+      "isbn": "9788765432109",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 6,
+      "title": "Serenity's Song",
+      "author": "Jessica Lee",
+      "category": "Drama",
+      "isbn": "9785678901234",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 7,
+      "title": "Whispers in the Wind",
+      "author": "Daniel Moore",
+      "category": "Horror",
+      "isbn": "9786789012345",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 8,
+      "title": "Culinary Adventures",
+      "author": "Isabella Clark",
+      "category": "Cooking",
+      "isbn": "9787890123456",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 9,
+      "title": "Infinite Realities",
+      "author": "Ryan Turner",
+      "category": "Science Fiction",
+      "isbn": "9788901234567",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 10,
+      "title": "Heartstrings Attached",
+      "author": "Olivia Parker",
+      "category": "Romance",
+      "isbn": "9789012345678",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 11,
+      "title": "Mindful Reflections",
+      "author": "Jonathan Reed",
+      "category": "Self-Help",
+      "isbn": "9780123456781",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 12,
+      "title": "Secrets of the Enchanted Forest",
+      "author": "Emma Green",
+      "category": "Fantasy",
+      "isbn": "9781234567892",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 13,
+      "title": "Uncharted Waters",
+      "author": "Benjamin Scott",
+      "category": "Adventure",
+      "isbn": "9782345678901",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 14,
+      "title": "Threads of Fate",
+      "author": "Sophia Adams",
+      "category": "Mystery",
+      "isbn": "9783456789012",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 15,
+      "title": "Gastronomic Journeys",
+      "author": "Nathan Hall",
+      "category": "Cooking",
+      "isbn": "9784567890123",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 16,
+      "title": "Eternal Echoes",
+      "author": "Grace Young",
+      "category": "Fantasy",
+      "isbn": "9785678901234",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 17,
+      "title": "The Art of Mindfulness",
+      "author": "Michael Harris",
+      "category": "Self-Help",
+      "isbn": "9786789012345",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 18,
+      "title": "Captivating Cosmos",
+      "author": "Laura Turner",
+      "category": "Science Fiction",
+      "isbn": "9787890123456",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": 19,
+      "title": "Moonlit Melodies",
+      "author": "Ethan Wright",
+      "category": "Romance",
+      "isbn": "9788901234567",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": 20,
+      "title": "Stirring Shadows",
+      "author": "Ava Carter",
+      "category": "Horror",
+      "isbn": "9789012345678",
+      "createdAt": "2023-08-24T10:00:00.000Z",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "title": "123123`",
+      "author": "21312",
+      "category": "321312",
+      "isbn": "213123123",
+      "createdAt": "August 24th 2023, 4:58:36 pm",
+      "modifiedAt": null,
+      "isActive": false,
+      "id": 22
+    },
+    {
+      "title": "",
+      "author": "huihu",
+      "category": "",
+      "isbn": "",
+      "createdAt": "24th August 2023, 5:00 pm",
+      "modifiedAt": "24th August 2023, 5:36",
+      "isActive": false,
+      "id": 23
+    },
+    {
+      "title": "1",
+      "author": "1",
+      "category": "1",
+      "isbn": "1",
+      "createdAt": "24th August 2023, 5:00",
+      "modifiedAt": "24th August 2023, 5:35",
+      "isActive": false,
+      "id": 24
+    },
+    {
+      "title": "wewrwerwe",
+      "author": "werewrew",
+      "category": "rewrewr",
+      "isbn": "werewrew",
+      "createdAt": "24th August 2023, 5:03",
+      "modifiedAt": "24th August 2023, 5:34",
+      "isActive": false,
+      "id": 25
+    }
+  ]
+}
