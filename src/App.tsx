@@ -8,6 +8,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -34,10 +50,11 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
+  SelectLabel,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
@@ -45,7 +62,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { fetchBooks } from "./components/api";
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
-import { Pencil, Trash2, Star, ChevronLeft, Save } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Star,
+  ChevronLeft,
+  Save,
+  ChevronUp,
+} from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Plus, Filter } from "lucide-react";
@@ -94,22 +118,35 @@ function App() {
     setShowDeactivated(true);
   };
 
+  // Update number of all and filtered books
   useEffect(() => {
     setFilteredBooksNumber(filteredBooks.length);
     setBooksNumber(books.length);
   }, [showActive, showDeactivated, showAll, books]);
 
+  // Loading data from server is used to execute side-effects in functional components ones.
   useEffect(() => {
+    // Define an asynchronous function to fetch book data.
     const fetchData = async () => {
       try {
+        // Await the fetching of books from the fetchBooks function.
         const booksData = await fetchBooks();
+
+        // Update the books state with the fetched data.
         setBooks(booksData);
+
+        // Update the number of books state with the length of fetched data.
         setBooksNumber(booksData.length);
+
+        // Display a toast notification indicating successful data fetching.
         toast({
           title: `Your books are loaded.`,
         });
       } catch (error) {
+        // Log any errors that occur during the fetch.
         console.error("Error fetching books:", error);
+
+        // Display a toast notification indicating an error occurred.
         toast({
           variant: "destructive",
           title: `Error fetching books.`,
@@ -117,27 +154,208 @@ function App() {
         });
       }
     };
+
+    // Call the fetchData function to initiate the data fetch.
     fetchData();
 
+    // Update the state for the number of filtered books.
     setFilteredBooksNumber(filteredBooks.length);
+
+    // Empty dependency array means this useEffect will only run once, similar to componentDidMount in class components.
   }, []);
 
+  // Define a new array called 'filteredBooks' by filtering through the 'books' array.
   const filteredBooks = books.filter((book) => {
+    // If the 'showAll' flag is true, include all books without filtering.
     if (showAll) {
       return true;
     }
+
+    // If the 'showActive' flag is true, only include books where the 'isActive' property is true.
     if (showActive) {
       return book.isActive === true;
     }
+
+    // If the 'showDeactivated' flag is true, only include books where the 'isActive' property is false.
     if (showDeactivated) {
       return book.isActive === false;
     }
+
+    // If none of the above conditions are met, exclude the book from the 'filteredBooks' array.
     return false;
   });
 
-  const handleToggleActive = async (bookId: any) => {
+  const handleAddBook = async (
+    tit: string,
+    aut: string,
+    cat: string,
+    isb: number
+  ) => {
+    // Check if the 'btnAdd' state (or variable) is true before proceeding.
+    if (btnAdd) {
+      try {
+        // Disable the 'Add' button to prevent multiple submissions.
+        setBtnAdd(false);
+
+        // Construct a new book object with the provided parameters and other default values.
+        const newBook = {
+          id: uuidv4(), // Generate a unique ID for the new book.
+          title: tit,
+          author: aut,
+          category: cat,
+          isbn: isb,
+          createdAt: moment().format("Do MMMM YYYY, hh:mm, a"), // Set the current date and time as the creation timestamp.
+          modifiedAt: null, // No modifications at the time of creation.
+          isActive: false, // The book is set to inactive by default.
+        };
+
+        // Send a POST request to the backend to add the new book.
+        const response = await fetch(`http://localhost:5000/books`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newBook),
+        });
+
+        // If the POST request is successful, update the local state and clear the input fields.
+        if (response.ok) {
+          const createdBook = await response.json();
+          setBooks((prevBooks) => [...prevBooks, createdBook]);
+          setTitleAdd("");
+          setAuthorAdd("");
+          setCategoryAdd("");
+          setISBNAdd();
+
+          // Display a success notification to the user.
+          toast({
+            title: `Book added successfully.`,
+          });
+        } else {
+          // If the POST request fails, display an error notification.
+          toast({
+            variant: "destructive",
+            title: `Error adding book.`,
+            description: "Try again later.",
+          });
+          console.error("Error adding book:", response.status);
+        }
+      } catch (error) {
+        // Log any other errors that might occur during the process.
+        console.error("Error adding book:", error);
+      }
+    }
+  };
+
+  const handleEditBook = async (
+    bookId: any,
+    tit: string,
+    aut: string,
+    cat: string,
+    isb: number
+  ) => {
+    // Check if the 'btnEdit' state (or variable) is true before proceeding.
+    if (btnEdit) {
+      try {
+        // Disable the 'Edit' button to prevent multiple submissions.
+        setBtnEdit(false);
+
+        // Construct an edited book object with the provided parameters.
+        const editBook = {
+          id: bookId,
+          title: tit,
+          author: aut,
+          category: cat,
+          isbn: isb,
+          modifiedAt: moment().format("D MMMM YYYY, hh:mm a"), // Set the current date and time as the modification timestamp.
+        };
+
+        // Send a PATCH request to the backend to update the book's details.
+        const response = await fetch(`http://localhost:5000/books/${bookId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editBook),
+        });
+
+        // If the PATCH request is successful, update the local state with the edited book details.
+        if (response.ok) {
+          const editedBook = await response.json();
+          setBooks((prevBooks) =>
+            prevBooks.map((book) =>
+              book.id === bookId ? { ...book, ...editedBook } : book
+            )
+          );
+
+          // Clear the edit input fields.
+          setTitleEdit("");
+          setAuthorEdit("");
+          setCategoryEdit("");
+          setISBNEdit("");
+
+          // Display a success notification to the user.
+          toast({
+            title: `Book edited successfully.`,
+          });
+        } else {
+          // If the PATCH request fails, display an error notification.
+          toast({
+            variant: "destructive",
+            title: `Error editing book.`,
+            description: "Try again later.",
+          });
+          console.error("Error editing book:", response.status);
+        }
+      } catch (error) {
+        // Log any other errors that might occur during the process.
+        console.error("Error editing book:", error);
+      }
+    }
+  };
+
+  const handleDeleteClick = async (bookId: any) => {
     try {
+      // Send a DELETE request to the backend to remove the book with the specified ID.
+      const response = await fetch(`http://localhost:5000/books/${bookId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      // If the DELETE request is successful:
+      if (response.ok) {
+        // Update the local state by filtering out the deleted book.
+        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+
+        // Display a success notification to the user.
+        toast({
+          title: `Book deleted successfully.`,
+        });
+      } else {
+        // If the DELETE request fails, display an error notification.
+        toast({
+          variant: "destructive",
+          title: `Error deleting book.`,
+          description: "Try again later.",
+        });
+        // Log the status code of the failed request for debugging purposes.
+        console.error("Error deleting book:", response.status);
+      }
+    } catch (error) {
+      // Catch any other errors that might occur during the process and log them.
+      console.error("Error deleting book:", error);
+    }
+  };
+
+  const handleToggleActive = async (bookId: any) => {
+    // Start a try block to catch potential errors during the async operations.
+    try {
+      // Find the index of the book with the provided ID.
       const bookIndex = books.findIndex((book) => book.id === bookId);
+
+      // If no book is found with the provided ID, log an error and show a toast notification.
       if (bookIndex === -1) {
         console.error(`Book with id ${bookId} not found.`);
         toast({
@@ -146,7 +364,11 @@ function App() {
         });
         return;
       }
+
+      // Get the opposite of the current 'isActive' status for the book.
       const updatedIsActive = !books[bookIndex].isActive;
+
+      // Make an API request to update the 'isActive' status of the book.
       const response = await fetch(`http://localhost:5000/books/${bookId}`, {
         method: "PATCH",
         headers: {
@@ -154,18 +376,23 @@ function App() {
         },
         body: JSON.stringify({ isActive: updatedIsActive }),
       });
+
+      // If the API request is successful, update the local state of books.
       if (response.ok) {
         setBooks((prevBooks) =>
           prevBooks.map((book, index) =>
             index === bookIndex ? { ...book, isActive: updatedIsActive } : book
           )
         );
+
+        // Show a toast notification indicating the action performed (added to or deleted from favorites).
         toast({
           title: `Your book ${
             updatedIsActive ? "added to" : "deleted from"
           } favorite successfully!`,
         });
       } else {
+        // If the API request fails, log an error and show a toast notification.
         toast({
           variant: "destructive",
           title: "Error toggling book status!",
@@ -174,6 +401,7 @@ function App() {
         console.error("Error toggling book status:", response.status);
       }
     } catch (error) {
+      // Catch any errors during the try block and log them.
       console.error("Error toggling book status:", error);
     }
   };
@@ -198,148 +426,46 @@ function App() {
   const checkAdd = (btn) => {
     if (titleError || authorError || categoryError || isbnError) {
       toast({
-      variant: "destructive",
-      title: `Check if the input are fill in.`,
-    });
-    return btn(false);}
-    btn(true);
-  }
-  const handleEditBook = async (
-    bookId: any,
-    tit: string,
-    aut: string,
-    cat: string,
-    isb: number
-  ) => {
-
-    if (btnEdit) {
-      try {
-        setBtnEdit(false);
-        const editBook = {
-          id: bookId,
-          title: tit,
-          author: aut,
-          category: cat,
-          isbn: isb,
-          modifiedAt: moment().format("D MMMM YYYY, hh:mm a"),
-        };
-        const response = await fetch(`http://localhost:5000/books/${bookId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editBook),
-        });
-        if (response.ok) {
-          const editedBook = await response.json();
-          setBooks((prevBooks) =>
-            prevBooks.map((book) =>
-              book.id === bookId ? { ...book, ...editedBook } : book
-            )
-          );
-          setTitleEdit("");
-          setAuthorEdit("");
-          setCategoryEdit("");
-          setISBNEdit("");
-          toast({
-            title: `Book edit successfully.`,
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: `Error editing book.`,
-            description: "Try again later.",
-          });
-          console.error("Error editing book:", response.status);
-        }
-      } catch (error) {
-        console.error("Error editing book:", error);
-      }
-    }
-  };
-
-  const handleAddBook = async (
-    tit: string,
-    aut: string,
-    cat: string,
-    isb: number
-  ) => {
-    if (btnAdd) {
-      try {
-        setBtnAdd(false);
-        const newBook = {
-          id: uuidv4(),
-          title: tit,
-          author: aut,
-          category: cat,
-          isbn: isb,
-          createdAt: moment().format("Do MMMM YYYY, hh:mm, a"),
-          modifiedAt: null,
-          isActive: false,
-        };
-        const response = await fetch(`http://localhost:5000/books`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newBook),
-        });
-        if (response.ok) {
-          const createdBook = await response.json();
-          setBooks((prevBooks) => [...prevBooks, createdBook]);
-          setTitleAdd("");
-          setAuthorAdd("");
-          setCategoryAdd("");
-          setISBNAdd();
-          toast({
-            title: `Book added successfully.`,
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: `Error adding book.`,
-            description: "Try again later.",
-          });
-          console.error("Error adding book:", response.status);
-        }
-      } catch (error) {
-        console.error("Error adding book:", error);
-      }
-    }
-  };
-
-  const handleDeleteClick = async (bookId: any) => {
-    try {
-      const response = await fetch(`http://localhost:5000/books/${bookId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        variant: "destructive",
+        title: `Check if the input are fill in.`,
       });
-
-      if (response.ok) {
-        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
-
-        toast({
-          title: `Book delete successfully.`,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: `Error deleting book.`,
-          description: "Try again later.",
-        });
-        console.error("Error deleting book:", response.status);
-      }
-    } catch (error) {
-      console.error("Error deleting book:", error);
+      return btn(false);
     }
+    btn(true);
   };
 
+  const bookCategories = {
+    fiction: [
+      "Literary",
+      "Mystery",
+      "Thriller",
+      "Historical",
+      "Romance",
+      "Science Fiction",
+      "Fantasy",
+      "Horror",
+    ],
+    nonFiction: [
+      "Biography",
+      "Memoir",
+      "Self-help",
+      "Health",
+      "True Crime",
+      "History",
+      "Science",
+      "Travel",
+    ],
+    children: ["Picture Books", "Middle Grade", "Young Adult"],
+    poetry: ["Contemporary", "Classic", "Epic", "Narrative", "Haiku"],
+    classics: ["Ancient", "Medieval", "Renaissance", "Modern"],
+    religious: ["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism"],
+    academic: ["Textbook", "Research", "Journal"],
+    comics: ["Superhero", "Fantasy", "Manga", "Graphic Novels"],
+  };
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <main className="grid grid-rows-[10rem_1fr_5rem] h-screen">
-        <header className="container flex justify-between items-center py-5 px-10">
+        <header className=" flex flex-col md:flex-row justify-between items-center py-5 px-10">
           <div>
             <h1 className="text-3xl font-black">Demo Book List</h1>
             <h2>
@@ -348,9 +474,10 @@ function App() {
           </div>
 
           <div className="flex gap-5">
+            {/* Dropdown filter */}
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Button>
+                <Button className="w-full">
                   <Filter className="mr-2 h-4 w-4" />
                   Filter
                 </Button>
@@ -382,6 +509,8 @@ function App() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* Modal window for add book */}
             <Dialog>
               <DialogTrigger>
                 <Button>
@@ -442,6 +571,7 @@ function App() {
                     }
                   />
                 </div>
+
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label
                     htmlFor="category"
@@ -451,62 +581,45 @@ function App() {
                   >
                     Category
                   </Label>
-                  <Select>
-                    <SelectTrigger className="min-w-[180px] col-span-3">
+
+                  <Select
+                    onValueChange={(e) => {
+                      setCategoryAdd(e);
+                    }}
+                  >
+                    <SelectTrigger className=" col-span-3">
                       <SelectValue placeholder="Chose one from list" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectGroup>
-                        <ScrollArea className="h-72 rounded-md ">
-                          <SelectItem value="fiction">Fiction</SelectItem>
-                          <SelectItem value="non-fiction">
-                            Non-Fiction
-                          </SelectItem>
-                          <SelectItem value="mystery">Mystery</SelectItem>
-                          <SelectItem value="fantasy">Fantasy</SelectItem>
-                          <SelectItem value="romance">Romance</SelectItem>
-                          <SelectItem value="science-fiction">
-                            Science Fiction
-                          </SelectItem>
-                          <SelectItem value="historical-fiction">
-                            Historical Fiction
-                          </SelectItem>
-                          <SelectItem value="biography">Biography</SelectItem>
-                          <SelectItem value="self-help">Self-Help</SelectItem>
-                          <SelectItem value="childrens">Children's</SelectItem>
-                          <SelectItem value="young-adult">
-                            Young Adult
-                          </SelectItem>
-                          <SelectItem value="thriller">Thriller</SelectItem>
-                          <SelectItem value="horror">Horror</SelectItem>
-                          <SelectItem value="poetry">Poetry</SelectItem>
-                          <SelectItem value="graphic-novel">
-                            Graphic Novel
-                          </SelectItem>
-                          <SelectItem value="philosophy">Philosophy</SelectItem>
-                          <SelectItem value="travel">Travel</SelectItem>
-                          <SelectItem value="cookbook">Cookbook</SelectItem>
-                          <SelectItem value="religion">Religion</SelectItem>
-                          <SelectItem value="history">History</SelectItem>
-                        </ScrollArea>
-                      </SelectGroup>
+                      <ScrollArea className="rounded-md  w-full h-[30vh]">
+                        <SelectGroup>
+                          {Object.entries(bookCategories).map(
+                            ([category, subCategories]) => {
+                              return (
+                                <SelectLabel
+                                  className=" text-muted-foreground"
+                                  key={category}
+                                >
+                                  {category}
+                                  {subCategories.map((subCategory) => {
+                                    return (
+                                      <SelectItem
+                                        className=" text-foreground"
+                                        key={subCategory}
+                                        value={subCategory}
+                                      >
+                                        {subCategory}
+                                      </SelectItem>
+                                    );
+                                  })}
+                                </SelectLabel>
+                              );
+                            }
+                          )}
+                        </SelectGroup>
+                      </ScrollArea>
                     </SelectContent>
                   </Select>
-
-                  {/* <Input
-                    id="category"
-                    value={categoryAdd}
-                    className="col-span-3"
-                    onChange={(e) => {
-                      handleValidationInput(
-                        categoryAdd,
-                        setCategoryError,
-                        setCategoryAdd,
-                        e.target.value,
-                        setBtnAdd
-                      );
-                    }}
-                  /> */}
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label
@@ -550,9 +663,11 @@ function App() {
             </Dialog>
           </div>
         </header>
-        <section>
-          <ScrollArea className="rounded-md border p-4 w-full h-[74vh]">
-            <Table>
+
+        <section className="flex flex-col w-full rounded-md border overflow-auto">
+
+          <ScrollArea  className=" w-full h-[68vh]">
+            <Table className="">
               <TableCaption>A list of books from fake DB.</TableCaption>
               <TableHeader>
                 <TableRow>
@@ -580,7 +695,9 @@ function App() {
                     <TableCell className="text-start">
                       {books.modifiedAt ? books.modifiedAt : "-"}
                     </TableCell>
-                    <TableCell className="grid place-content-center grid-cols-3">
+                    <TableCell className="grid gap-1 place-items-center grid-cols-3 min-w-[160px]">
+                      {/* Edit book modal window */}
+
                       <Dialog>
                         <DialogTrigger>
                           <TooltipProvider>
@@ -640,16 +757,47 @@ function App() {
                             <Label htmlFor="category" className="text-right">
                               Category
                             </Label>
-                            <Input
-                              id="category"
-                              value={
-                                categoryEdit ? categoryEdit : books.category
-                              }
-                              className="col-span-3"
-                              onChange={(e) => {
-                                setCategoryEdit(e.target.value);
+                            <Select
+                              onValueChange={(e) => {
+                                setCategoryEdit(e);
                               }}
-                            />
+                              defaultValue={books.category}
+                            >
+                              <SelectTrigger className=" col-span-3">
+                                <SelectValue placeholder="Chose one from list" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <ScrollArea className="rounded-md  w-full h-[30vh]">
+                                  <SelectGroup>
+                                    {Object.entries(bookCategories).map(
+                                      ([category, subCategories]) => {
+                                        return (
+                                          <SelectLabel
+                                            className=" text-muted-foreground"
+                                            key={category}
+                                          >
+                                            {category}
+                                            {subCategories.map(
+                                              (subCategory) => {
+                                                return (
+                                                  <SelectItem
+                                                    className=" text-foreground"
+                                                    key={subCategory}
+                                                    value={subCategory}
+                                                  >
+                                                    {subCategory}
+                                                  </SelectItem>
+                                                );
+                                              }
+                                            )}
+                                          </SelectLabel>
+                                        );
+                                      }
+                                    )}
+                                  </SelectGroup>
+                                </ScrollArea>
+                              </SelectContent>
+                            </Select>
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="isbn" className="text-right">
@@ -689,16 +837,18 @@ function App() {
                           </DialogFooter>
                         </DialogContent>
                       </Dialog>
+
+                      {/* Add to favorite  */}
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
+                              onClick={() => handleToggleActive(books.id)}
                               className="hover:text-yellow-200"
                               variant="outline"
                               size="icon"
                             >
                               <Star
-                                onClick={() => handleToggleActive(books.id)}
                                 className={`${
                                   books.isActive ? "text-yellow-400" : " "
                                 } h-4 w-4`}
@@ -714,6 +864,7 @@ function App() {
                         </Tooltip>
                       </TooltipProvider>
 
+                      {/* delete btn show when favofit is active */}
                       {books.isActive ? (
                         ""
                       ) : (
@@ -745,6 +896,8 @@ function App() {
           </ScrollArea>
           <Dialog />
         </section>
+
+        {/* Footer with link */}
         <footer className="sticky bottom-o left-0 right-0 flex justify-center items-center gap-1">
           <p>Made by</p>
           <a
