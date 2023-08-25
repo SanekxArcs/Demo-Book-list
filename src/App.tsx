@@ -77,11 +77,22 @@ import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 import { DialogClose } from "@radix-ui/react-dialog";
 
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  category: string;
+  isbn: number;
+  createdAt: string;
+  modifiedAt: string | null;
+  isActive: boolean;
+}
+
 function App() {
   const [showAll, setShowAll] = useState<boolean>(false);
   const [showActive, setShowActive] = useState<boolean>(true);
   const [showDeactivated, setShowDeactivated] = useState<boolean>(false);
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [titleAdd, setTitleAdd] = useState<string>("");
   const [authorAdd, setAuthorAdd] = useState<string>("");
   const [categoryAdd, setCategoryAdd] = useState<string>("");
@@ -406,22 +417,28 @@ function App() {
     }
   };
 
-  const handleValidationInput = (checkData, setError, setData, data, btn) => {
-    checkAdd(btn);
-    setData(data);
-    const regex = /^[A-Za-z0-9\.\-\_@]+$/;
-    if (checkData.length <= 0 || !regex.test(checkData)) {
-      setError(true);
-      btn(false);
-      toast({
-        variant: "destructive",
-        title: `Check if the input are fill in.`,
-      });
-      return;
-    }
-    setError(false);
-    checkAdd(btn);
-  };
+const handleValidationInput = (
+  checkData: string,
+  setError: React.Dispatch<React.SetStateAction<boolean>>,
+  setData: React.Dispatch<React.SetStateAction<string>>,
+  data: string,
+  btn: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  checkAdd(btn);
+  setData(data);
+  const regex = /^[A-Za-z0-9\.\-\_@]+$/;
+  if (checkData.length <= 0 || !regex.test(checkData)) {
+    setError(true);
+    btn(false);
+    toast({
+      variant: "destructive",
+      title: `Check if the input are fill in.`,
+    });
+    return;
+  }
+  setError(false);
+  checkAdd(btn);
+};
 
   const checkAdd = (btn) => {
     if (titleError || authorError || categoryError || isbnError) {
@@ -464,8 +481,13 @@ function App() {
   };
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+<<<<<<< Updated upstream
       <main className="grid grid-rows-[10rem_1fr_5rem] h-screen">
         <header className=" flex flex-col md:flex-row justify-between items-center py-5 px-10">
+=======
+      <main className="grid grid-rows-[10vh_85vh_5vh] h-screen">
+        <header className=" flex justify-between items-center py-5 px-10">
+>>>>>>> Stashed changes
           <div>
             <h1 className="text-3xl font-black">Demo Book List</h1>
             <h2>
@@ -663,11 +685,17 @@ function App() {
             </Dialog>
           </div>
         </header>
+<<<<<<< Updated upstream
 
         <section className="flex flex-col w-full rounded-md border overflow-auto">
 
           <ScrollArea  className=" w-full h-[68vh]">
             <Table className="">
+=======
+        <section>
+          <ScrollArea className="rounded-md border p-4 w-full h-[84vh]">
+            <Table>
+>>>>>>> Stashed changes
               <TableCaption>A list of books from fake DB.</TableCaption>
               <TableHeader>
                 <TableRow>
