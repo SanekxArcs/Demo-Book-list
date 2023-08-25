@@ -7,9 +7,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Toaster } from "@/components/ui/toaster";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import { useToast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +26,10 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-
 import { fetchBooks } from "./components/api";
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
-import { Pencil, Trash2, Star } from "lucide-react";
+import { Pencil, Trash2, Star, ChevronLeft, Save } from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Plus, Filter } from "lucide-react";
@@ -36,23 +42,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 function App() {
   const [showAll, setShowAll] = useState<boolean>(true);
   const [showActive, setShowActive] = useState<boolean>(false);
   const [showDeactivated, setShowDeactivated] = useState<boolean>(false);
   const [books, setBooks] = useState([]);
-  const { toast } = useToast();
   const [titleAdd, setTitleAdd] = useState<string>("");
   const [authorAdd, setAuthorAdd] = useState<string>("");
   const [categoryAdd, setCategoryAdd] = useState<string>("");
-  const [isbnAdd, setISBNAdd] = useState<number>("");
+  const [isbnAdd, setISBNAdd] = useState<number>();
   const [titleEdit, setTitleEdit] = useState<string>("");
   const [authorEdit, setAuthorEdit] = useState<string>("");
   const [categoryEdit, setCategoryEdit] = useState<string>("");
-  const [isbnEdit, setISBNEdit] = useState<number>("");
-  
+  const [isbnEdit, setISBNEdit] = useState<number>();
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [authorError, setAuthorError] = useState<boolean>(false);
+  const [categoryError, setCategoryError] = useState<boolean>(false);
+  const [isbnError, setISBNError] = useState<boolean>(false);
+  const [btnAdd, setBtnAdd] = useState<boolean>(false);
+  const [btnEdit, setBtnEdit] = useState<boolean>(false);
+
+  const [filteredBooksNumber, setFilteredBooksNumber] = useState<number>(0);
   const [booksNumber, setBooksNumber] = useState<number>(0);
+
+  const { toast } = useToast();
 
   const handleShowAllClick = () => {
     setShowAll(true);
@@ -73,43 +88,56 @@ function App() {
   };
 
   useEffect(() => {
+    setFilteredBooksNumber(filteredBooks.length);
+  }, [showActive, showDeactivated, showAll, books]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const booksData = await fetchBooks();
         setBooks(booksData);
         setBooksNumber(booksData.length);
+        toast({
+          title: `Your books are loaded.`,
+        });
       } catch (error) {
         console.error("Error fetching books:", error);
+        toast({
+          variant: "destructive",
+          title: `Error fetching books.`,
+          description: "Try again later.",
+        });
       }
     };
     fetchData();
-  }, [books]);
+
+    setFilteredBooksNumber(filteredBooks.length);
+  }, []);
 
   const filteredBooks = books.filter((book) => {
-    if (showAll) return true;
-    if (showActive) return book.isActive === true;
-    if (showDeactivated) return book.isActive === false;
+    if (showAll) {
+      return true;
+    }
+    if (showActive) {
+      return book.isActive === true;
+    }
+    if (showDeactivated) {
+      return book.isActive === false;
+    }
     return false;
   });
 
-  const toastShow = () => {
-    toast({
-      variant: "destructive",
-      title: "Uh oh! Something went wrong.",
-      description: "There was a problem with your request.",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    });
-  };
-
-  const handleToggleActive = async (bookId) => {
+  const handleToggleActive = async (bookId: any) => {
     try {
-      console.log("click")
       const bookIndex = books.findIndex((book) => book.id === bookId);
       if (bookIndex === -1) {
         console.error(`Book with id ${bookId} not found.`);
+        toast({
+          title: `Book not found.`,
+          description: "Try again later.",
+        });
         return;
       }
-
       const updatedIsActive = !books[bookIndex].isActive;
       const response = await fetch(`http://localhost:5000/books/${bookId}`, {
         method: "PATCH",
@@ -118,16 +146,23 @@ function App() {
         },
         body: JSON.stringify({ isActive: updatedIsActive }),
       });
-      toastShow();
-
       if (response.ok) {
         setBooks((prevBooks) =>
           prevBooks.map((book, index) =>
             index === bookIndex ? { ...book, isActive: updatedIsActive } : book
           )
         );
-        console.log("ok");
+        toast({
+          title: `Your book ${
+            updatedIsActive ? "added to" : "deleted from"
+          } favorite successfully!`,
+        });
       } else {
+        toast({
+          variant: "destructive",
+          title: "Error toggling book status!",
+          description: "Try again later.",
+        });
         console.error("Error toggling book status:", response.status);
       }
     } catch (error) {
@@ -135,6 +170,32 @@ function App() {
     }
   };
 
+  const handleValidationInput = (checkData, setError, setData, data, btn) => {
+    checkAdd(btn);
+    setData(data);
+    const regex = /^[A-Za-z0-9\.\-\_@]+$/;
+    if (checkData.length <= 0 || !regex.test(checkData)) {
+      setError(true);
+      btn(false);
+      toast({
+        variant: "destructive",
+        title: `Check if the input are fill in.`,
+      });
+      return;
+    }
+    setError(false);
+    checkAdd(btn);
+  };
+
+  const checkAdd = (btn) => {
+    if (titleError || authorError || categoryError || isbnError) {
+      toast({
+      variant: "destructive",
+      title: `Check if the input are fill in.`,
+    });
+    return btn(false);}
+    btn(true);
+  }
   const handleEditBook = async (
     bookId: any,
     tit: string,
@@ -142,39 +203,50 @@ function App() {
     cat: string,
     isb: number
   ) => {
-    try {
-      const editBook = {
-        title: tit,
-        author: aut,
-        category: cat,
-        isbn: isb,
-        modifiedAt: moment().format("Do MMMM YYYY, h:mm"),
-        isActive: false,
-      };
 
-      const response = await fetch(`http://localhost:5000/books/${bookId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editBook),
-      });
-
-      if (response.ok) {
-        const editedBook = await response.json();
-
-        // Update the local state to include the new book
-        setBooks((prevBooks) => [...prevBooks, editedBook]);
-        console.log("Book added successfully");
-        setTitleEdit("");
-        setAuthorEdit("");
-        setCategoryEdit("");
-        setISBNEdit("");
-      } else {
-        console.error("Error editing book:", response.status);
+    if (btnEdit) {
+      try {
+        setBtnEdit(false);
+        const editBook = {
+          id: bookId,
+          title: tit,
+          author: aut,
+          category: cat,
+          isbn: isb,
+          modifiedAt: moment().format("D MMMM YYYY, hh:mm a"),
+        };
+        const response = await fetch(`http://localhost:5000/books/${bookId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editBook),
+        });
+        if (response.ok) {
+          const editedBook = await response.json();
+          setBooks((prevBooks) =>
+            prevBooks.map((book) =>
+              book.id === bookId ? { ...book, ...editedBook } : book
+            )
+          );
+          setTitleEdit("");
+          setAuthorEdit("");
+          setCategoryEdit("");
+          setISBNEdit("");
+          toast({
+            title: `Book edit successfully.`,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: `Error editing book.`,
+            description: "Try again later.",
+          });
+          console.error("Error editing book:", response.status);
+        }
+      } catch (error) {
+        console.error("Error editing book:", error);
       }
-    } catch (error) {
-      console.error("Error editing book:", error);
     }
   };
 
@@ -182,47 +254,53 @@ function App() {
     tit: string,
     aut: string,
     cat: string,
-    isb: number,
+    isb: number
   ) => {
-    try {
-      const newBook = {
-        id: books.length + 1,
-        title: tit,
-        author: aut,
-        category: cat,
-        isbn: isb,
-        createdAt: moment().format('Do MMMM YYYY, h:mm'),
-        modifiedAt: null,
-        isActive: false,
-      };
-
-      const response = await fetch(`http://localhost:5000/books`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newBook),
-      });
-
-      if (response.ok) {
-        const createdBook = await response.json();
-
-        // Update the local state to include the new book
-        setBooks((prevBooks) => [...prevBooks, createdBook]);
-        console.log("Book added successfully");
-        setTitleAdd("");
-        setAuthorAdd("");
-        setCategoryAdd("");
-        setISBNAdd("");
-      } else {
-        console.error("Error adding book:", response.status);
+    if (btnAdd) {
+      try {
+        setBtnAdd(false);
+        const newBook = {
+          id: uuidv4(),
+          title: tit,
+          author: aut,
+          category: cat,
+          isbn: isb,
+          createdAt: moment().format("Do MMMM YYYY, hh:mm, a"),
+          modifiedAt: null,
+          isActive: false,
+        };
+        const response = await fetch(`http://localhost:5000/books`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newBook),
+        });
+        if (response.ok) {
+          const createdBook = await response.json();
+          setBooks((prevBooks) => [...prevBooks, createdBook]);
+          setTitleAdd("");
+          setAuthorAdd("");
+          setCategoryAdd("");
+          setISBNAdd();
+          toast({
+            title: `Book added successfully.`,
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: `Error adding book.`,
+            description: "Try again later.",
+          });
+          console.error("Error adding book:", response.status);
+        }
+      } catch (error) {
+        console.error("Error adding book:", error);
       }
-    } catch (error) {
-      console.error("Error adding book:", error);
     }
   };
 
-  const handleDeleteClick = async (bookId) => {
+  const handleDeleteClick = async (bookId: any) => {
     try {
       const response = await fetch(`http://localhost:5000/books/${bookId}`, {
         method: "DELETE",
@@ -232,13 +310,21 @@ function App() {
       });
 
       if (response.ok) {
-        console.log("delete");
-        toastShow();
+        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+
+        toast({
+          title: `Book delete successfully.`,
+        });
       } else {
-        console.error("Error deactivating book:", response.status);
+        toast({
+          variant: "destructive",
+          title: `Error deleting book.`,
+          description: "Try again later.",
+        });
+        console.error("Error deleting book:", response.status);
       }
     } catch (error) {
-      console.error("Error deactivating book:", error);
+      console.error("Error deleting book:", error);
     }
   };
 
@@ -246,9 +332,12 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <main className="grid grid-rows-[10rem_1fr_5rem] h-screen">
         <header className="container flex justify-between items-center py-5 px-10">
-          <h1 className="text-3xl font-bold">
-            Demo Book List <span>{booksNumber}</span>
-          </h1>
+          <div>
+            <h1 className="text-3xl font-black">Demo Book List</h1>
+            <h2>
+              Showing {filteredBooksNumber} of <span>{booksNumber}</span>
+            </h2>
+          </div>
 
           <div className="flex gap-5">
             <DropdownMenu>
@@ -300,58 +389,111 @@ function App() {
                   </DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="title" className="text-right">
-                    Title
+                  <Label
+                    htmlFor="title"
+                    className={`${titleError ? "text-red-500" : ""} text-right`}
+                  >
+                    {`Title ${titleError ? "don`t fill corectly" : ""}`}
                   </Label>
                   <Input
                     id="title"
                     value={titleAdd}
                     className="col-span-3"
-                    onChange={(e) => setTitleAdd(e.target.value)}
+                    onChange={(e) => {
+                      handleValidationInput(
+                        titleAdd,
+                        setTitleError,
+                        setTitleAdd,
+                        e.target.value,
+                        setBtnAdd
+                      );
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="author" className="text-right">
+                  <Label
+                    htmlFor="author"
+                    className={`${
+                      authorError ? "text-red-500" : ""
+                    } text-right`}
+                  >
                     Author
                   </Label>
                   <Input
                     id="author"
                     value={authorAdd}
                     className="col-span-3"
-                    onChange={(e) => setAuthorAdd(e.target.value)}
+                    onChange={(e) =>
+                      handleValidationInput(
+                        authorAdd,
+                        setAuthorError,
+                        setAuthorAdd,
+                        e.target.value,
+                        setBtnAdd
+                      )
+                    }
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="category" className="text-right">
+                  <Label
+                    htmlFor="category"
+                    className={`${
+                      categoryError ? "text-red-500" : ""
+                    } text-right`}
+                  >
                     Category
                   </Label>
                   <Input
                     id="category"
                     value={categoryAdd}
                     className="col-span-3"
-                    onChange={(e) => setCategoryAdd(e.target.value)}
+                    onChange={(e) => {
+                      handleValidationInput(
+                        categoryAdd,
+                        setCategoryError,
+                        setCategoryAdd,
+                        e.target.value,
+                        setBtnAdd
+                      );
+                    }}
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="isbn" className="text-right">
+                  <Label
+                    htmlFor="isbn"
+                    className={`${isbnError ? "text-red-500" : ""} text-right`}
+                  >
                     ISBN
                   </Label>
                   <Input
                     id="isbn"
                     value={isbnAdd}
                     className="col-span-3"
-                    onChange={(e) => setISBNAdd(e.target.value)}
+                    onChange={(e) => {
+                      handleValidationInput(
+                        isbnAdd,
+                        setISBNError,
+                        setISBNAdd,
+                        e.target.value,
+                        setBtnAdd
+                      );
+                    }}
                   />
                 </div>
 
                 <DialogFooter>
+                  <DialogClose>
+                    <Button variant="secondary">
+                      <ChevronLeft className="mr-2 h-4 w-4" /> Back to dashboard
+                    </Button>
+                  </DialogClose>
                   <Button
                     onClick={() =>
                       handleAddBook(titleAdd, authorAdd, categoryAdd, isbnAdd)
                     }
                     type="submit"
                   >
-                    Save changes
+                    <Save className="mr-2 h-4 w-4" /> Add Book
                   </Button>
                 </DialogFooter>
               </DialogContent>
@@ -364,7 +506,6 @@ function App() {
               <TableCaption>A list of books from fake DB.</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead>№</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Author</TableHead>
                   <TableHead>Category</TableHead>
@@ -377,25 +518,37 @@ function App() {
               <TableBody>
                 {filteredBooks.map((books: any) => (
                   <TableRow key={books.id}>
-                    <TableCell>{books.id + 1}</TableCell>
-                    <TableCell>{books.title}</TableCell>
-                    <TableCell>{books.author}</TableCell>
-                    <TableCell>{books.category}</TableCell>
-                    <TableCell>{books.isbn}</TableCell>
-                    <TableCell>{books.createdAt}</TableCell>
+                    <TableCell>{books.title ? books.title : "-"}</TableCell>
+                    <TableCell>{books.author ? books.author : "-"}</TableCell>
+                    <TableCell>
+                      {books.category ? books.category : "-"}
+                    </TableCell>
+                    <TableCell>{books.isbn ? books.isbn : "-"}</TableCell>
+                    <TableCell>
+                      {books.createdAt ? books.createdAt : "-"}
+                    </TableCell>
                     <TableCell className="text-start">
                       {books.modifiedAt ? books.modifiedAt : "-"}
                     </TableCell>
                     <TableCell className="grid place-content-center grid-cols-3">
                       <Dialog>
                         <DialogTrigger>
-                          <Button
-                            className="hover:text-blue-400"
-                            variant="outline"
-                            size="icon"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  className="hover:text-blue-400"
+                                  variant="outline"
+                                  size="icon"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Edit book</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         </DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
@@ -408,11 +561,11 @@ function App() {
                             </DialogDescription>
                           </DialogHeader>
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
+                            <Label htmlFor="title" className="text-right">
                               Title
                             </Label>
                             <Input
-                              id="username"
+                              id="title"
                               value={titleEdit ? titleEdit : books.title}
                               className="col-span-3"
                               onChange={(e) => {
@@ -421,11 +574,11 @@ function App() {
                             />
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
+                            <Label htmlFor="author" className="text-right">
                               Author
                             </Label>
                             <Input
-                              id="username"
+                              id="author"
                               value={authorEdit ? authorEdit : books.author}
                               className="col-span-3"
                               onChange={(e) => {
@@ -434,11 +587,11 @@ function App() {
                             />
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
+                            <Label htmlFor="category" className="text-right">
                               Category
                             </Label>
                             <Input
-                              id="username"
+                              id="category"
                               value={
                                 categoryEdit ? categoryEdit : books.category
                               }
@@ -449,11 +602,11 @@ function App() {
                             />
                           </div>
                           <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="username" className="text-right">
-                              Username
+                            <Label htmlFor="isbn" className="text-right">
+                              ISBN
                             </Label>
                             <Input
-                              id="username"
+                              id="isbn"
                               value={isbnEdit ? isbnEdit : books.isbn}
                               className="col-span-3"
                               onChange={(e) => {
@@ -463,47 +616,77 @@ function App() {
                           </div>
 
                           <DialogFooter>
+                            <DialogClose>
+                              <Button variant="secondary">
+                                <ChevronLeft className="mr-2 h-4 w-4" /> Back to
+                                dashboard
+                              </Button>
+                            </DialogClose>
+                            
+
                             <Button
                               onClick={() =>
-                                handleEditBook(
-                                  books.id,
-                                  titleEdit,
-                                  authorEdit,
-                                  categoryEdit,
-                                  isbnEdit
+                                handleAddBook(
+                                  titleAdd,
+                                  authorAdd,
+                                  categoryAdd,
+                                  isbnAdd
                                 )
                               }
                               type="submit"
                             >
-                              Save changes
+                              <Save className="mr-2 h-4 w-4" /> Save changes
                             </Button>
                           </DialogFooter>
                         </DialogContent>
                       </Dialog>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              className="hover:text-yellow-200"
+                              variant="outline"
+                              size="icon"
+                            >
+                              <Star
+                                onClick={() => handleToggleActive(books.id)}
+                                className={`${
+                                  books.isActive ? "text-yellow-400" : " "
+                                } h-4 w-4`}
+                              />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>
+                              {books.isActive ? "Delete from " : "Add to "}
+                              favorite
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
 
-                      <Button
-                        className="hover:text-yellow-200"
-                        variant="outline"
-                        size="icon"
-                      >
-                        <Star
-                          onClick={() => handleToggleActive(books.id)}
-                          className={`${
-                            books.isActive ? "text-yellow-400" : " "
-                          } h-4 w-4`}
-                        />
-                      </Button>
                       {books.isActive ? (
                         ""
                       ) : (
-                        <Button
-                          className="hover:text-red-400"
-                          onClick={() => handleDeleteClick(books.id)}
-                          variant="outline"
-                          size="icon"
-                        >
-                          <Trash2 className=" h-4 w-4" />
-                        </Button>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                className="hover:text-red-400"
+                                onClick={() => {
+                                  handleDeleteClick(books.id);
+                                }}
+                                variant="outline"
+                                size="icon"
+                              >
+                                <Trash2 className=" h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Delete book</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                     </TableCell>
                   </TableRow>
@@ -523,6 +706,7 @@ function App() {
             Oleksandr Dzisiak
           </a>
         </footer>
+        <Toaster />
       </main>
     </ThemeProvider>
   );
