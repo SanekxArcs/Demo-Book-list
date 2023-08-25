@@ -42,7 +42,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import { useToast } from "@/components/ui/use-toast";
-import { fetchBooks } from "./components/api";
+import { fetchBooks, fetchCategorie } from "./components/api";
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import {
@@ -69,113 +69,128 @@ interface Book {
   modifiedAt: string | null;
   isActive: boolean;
 }
+interface Categories {
+    Fiction: string[];
+    'Non-Fiction': string[];
+    Children: string[];
+    Poetry: string[];
+    Classics: string[];
+    Religious: string[];
+    Academic: string[];
+    Comics: string[];
+}
+
+interface FilterBtn {
+  all: boolean;
+  active: boolean;
+  deactivated: boolean;
+}
 
 function App() {
-  const [showAll, setShowAll] = useState<boolean>(false);
-  const [showActive, setShowActive] = useState<boolean>(true);
-  const [showDeactivated, setShowDeactivated] = useState<boolean>(false);
+  const { toast } = useToast();
+
+  const [filterBtn, setFilterBtn] = useState<FilterBtn>({
+    all: false,
+    active: true,
+    deactivated: false,
+  });
+
   const [books, setBooks] = useState<Book[]>([]);
+  const [categories, setCategories] = useState<Categories[]>();
+  const [addBook, setAddBooks] = useState<Book[]>([]);
+  const [editBook, setEditBooks] = useState<Book[]>([]);
+
   const [titleAdd, setTitleAdd] = useState<string>("");
   const [authorAdd, setAuthorAdd] = useState<string>("");
   const [categoryAdd, setCategoryAdd] = useState<string>("");
   const [isbnAdd, setISBNAdd] = useState<number>();
+
+  const [btnAdd, setBtnAdd] = useState<boolean>(false);
+
   const [titleEdit, setTitleEdit] = useState<string>("");
   const [authorEdit, setAuthorEdit] = useState<string>("");
   const [categoryEdit, setCategoryEdit] = useState<string>("");
   const [isbnEdit, setISBNEdit] = useState<number>();
+
+  const [btnEdit, setBtnEdit] = useState<boolean>(false);
+
   const [titleError, setTitleError] = useState<boolean>(false);
   const [authorError, setAuthorError] = useState<boolean>(false);
   const [categoryError, setCategoryError] = useState<boolean>(false);
   const [isbnError, setISBNError] = useState<boolean>(false);
-  const [btnAdd, setBtnAdd] = useState<boolean>(false);
-  const [btnEdit, setBtnEdit] = useState<boolean>(false);
+  
   const [filteredBooksNumber, setFilteredBooksNumber] = useState<number>(0);
   const [booksNumber, setBooksNumber] = useState<number>(0);
-  const { toast } = useToast();
 
-  const handleShowAllClick = () => {
-    setShowAll(true);
-    setShowActive(false);
-    setShowDeactivated(false);
-  };
+const handleShowAllClick = () => {
+  setFilterBtn({ all: true, active: false, deactivated: false });
+};
 
-  const handleShowActiveClick = () => {
-    setShowAll(false);
-    setShowActive(true);
-    setShowDeactivated(false);
-  };
+const handleShowActiveClick = () => {
+  setFilterBtn({ all: false, active: true, deactivated: false });
+};
 
-  const handleToogleActiveClick = () => {
-    setShowAll(false);
-    setShowActive(false);
-    setShowDeactivated(true);
-  };
+const handleShowDeactivatedClick = () => {
+  setFilterBtn({ all: false, active: false, deactivated: true });
+};
 
   // Update number of all and filtered books
   useEffect(() => {
     setFilteredBooksNumber(filteredBooks.length);
     setBooksNumber(books.length);
-  }, [showActive, showDeactivated, showAll, books]);
+  }, [ books, filterBtn]);
 
-  // Loading data from server is used to execute side-effects in functional components ones.
+   useEffect(() => {
+     const fetchData = async () => {
+       try {
+         const booksData = await fetchBooks();
+         setBooks(booksData);
+         setBooksNumber(booksData.length);
+         toast({
+           title: `Your books are loaded.`,
+         });
+       } catch (error) {
+         console.error("Error fetching books:", error);
+         toast({
+           variant: "destructive",
+           title: `Error fetching books.`,
+           description: "Try again later.",
+         });
+       }
+     };
+     fetchData();
+
+     setFilteredBooksNumber(filteredBooks.length);
+     setBooksNumber(books.length);
+   }, []);
+
   useEffect(() => {
-    // Define an asynchronous function to fetch book data.
     const fetchData = async () => {
       try {
-        // Await the fetching of books from the fetchBooks function.
-        const booksData = await fetchBooks();
+        const categoriesData = await fetchCategorie();
 
-        // Update the books state with the fetched data.
-        setBooks(booksData);
-
-        // Update the number of books state with the length of fetched data.
-        setBooksNumber(booksData.length);
-
-        // Display a toast notification indicating successful data fetching.
-        toast({
-          title: `Your books are loaded.`,
-        });
+        setCategories(categoriesData);
       } catch (error) {
-        // Log any errors that occur during the fetch.
-        console.error("Error fetching books:", error);
+        console.error("Error fetching categoies:", error);
 
-        // Display a toast notification indicating an error occurred.
         toast({
           variant: "destructive",
-          title: `Error fetching books.`,
+          title: `Error fetching categoies.`,
           description: "Try again later.",
         });
       }
     };
 
-    // Call the fetchData function to initiate the data fetch.
     fetchData();
-
-    // Update the state for the number of filtered books.
-    setFilteredBooksNumber(filteredBooks.length);
-
-    // Empty dependency array means this useEffect will only run once, similar to componentDidMount in class components.
-  }, []);
+  }, [books]);
 
   // Define a new array called 'filteredBooks' by filtering through the 'books' array.
   const filteredBooks = books.filter((book) => {
-    // If the 'showAll' flag is true, include all books without filtering.
-    if (showAll) {
-      return true;
-    }
+      if (filterBtn.all) {
+        return true;
+      }
 
-    // If the 'showActive' flag is true, only include books where the 'isActive' property is true.
-    if (showActive) {
-      return book.isActive === true;
-    }
-
-    // If the 'showDeactivated' flag is true, only include books where the 'isActive' property is false.
-    if (showDeactivated) {
-      return book.isActive === false;
-    }
-
-    // If none of the above conditions are met, exclude the book from the 'filteredBooks' array.
-    return false;
+      return filterBtn.active ? book.isActive : !book.isActive;
   });
 
   const handleAddBook = async (
@@ -433,34 +448,7 @@ const handleValidationInput = (
     btn(true);
   };
 
-  const bookCategories = {
-    fiction: [
-      "Literary",
-      "Mystery",
-      "Thriller",
-      "Historical",
-      "Romance",
-      "Science Fiction",
-      "Fantasy",
-      "Horror",
-    ],
-    nonFiction: [
-      "Biography",
-      "Memoir",
-      "Self-help",
-      "Health",
-      "True Crime",
-      "History",
-      "Science",
-      "Travel",
-    ],
-    children: ["Picture Books", "Middle Grade", "Young Adult"],
-    poetry: ["Contemporary", "Classic", "Epic", "Narrative", "Haiku"],
-    classics: ["Ancient", "Medieval", "Renaissance", "Modern"],
-    religious: ["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism"],
-    academic: ["Textbook", "Research", "Journal"],
-    comics: ["Superhero", "Fantasy", "Manga", "Graphic Novels"],
-  };
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <main className="grid grid-rows-[10vh_85vh_5vh] h-screen">
@@ -484,7 +472,7 @@ const handleValidationInput = (
               <DropdownMenuContent>
                 <DropdownMenuItem>
                   <DropdownMenuCheckboxItem
-                    checked={showAll}
+                    checked={filterBtn.all}
                     onCheckedChange={handleShowAllClick}
                   >
                     Show All
@@ -492,7 +480,7 @@ const handleValidationInput = (
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <DropdownMenuCheckboxItem
-                    checked={showActive}
+                    checked={filterBtn.active}
                     onCheckedChange={handleShowActiveClick}
                   >
                     Show Active
@@ -500,8 +488,8 @@ const handleValidationInput = (
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <DropdownMenuCheckboxItem
-                    checked={showDeactivated}
-                    onCheckedChange={handleToogleActiveClick}
+                    checked={filterBtn.deactivated}
+                    onCheckedChange={handleShowDeactivatedClick}
                   >
                     Show Deactivated
                   </DropdownMenuCheckboxItem>
@@ -592,7 +580,7 @@ const handleValidationInput = (
                     <SelectContent>
                       <ScrollArea className="rounded-md  w-full h-[30vh]">
                         <SelectGroup>
-                          {Object.entries(bookCategories).map(
+                          {Object.entries(categories).map(
                             ([category, subCategories]) => {
                               return (
                                 <SelectLabel
@@ -632,6 +620,7 @@ const handleValidationInput = (
                     value={isbnAdd}
                     className="col-span-3"
                     onChange={(e) => {
+                      console.log(e.target.id);
                       handleValidationInput(
                         isbnAdd,
                         setISBNError,
@@ -680,7 +669,9 @@ const handleValidationInput = (
               <TableBody>
                 {filteredBooks.map((books: any) => (
                   <TableRow key={books.id}>
-                    <TableCell className="font-medium">{books.title ? books.title : "-"}</TableCell>
+                    <TableCell className="font-medium">
+                      {books.title ? books.title : "-"}
+                    </TableCell>
                     <TableCell>{books.author ? books.author : "-"}</TableCell>
                     <TableCell>
                       {books.category ? books.category : "-"}
@@ -766,7 +757,7 @@ const handleValidationInput = (
                               <SelectContent>
                                 <ScrollArea className="rounded-md  w-full h-[30vh]">
                                   <SelectGroup>
-                                    {Object.entries(bookCategories).map(
+                                    {Object.entries(categories).map(
                                       ([category, subCategories]) => {
                                         return (
                                           <SelectLabel

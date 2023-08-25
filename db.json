@@ -8,7 +8,7 @@
       "isbn": "9781234567890",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": true
+      "isActive": false
     },
     {
       "id": 2,
@@ -38,7 +38,7 @@
       "isbn": "9788765432109",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": true
+      "isActive": false
     },
     {
       "id": 6,
