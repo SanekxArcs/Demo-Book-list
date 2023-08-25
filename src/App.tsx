@@ -7,16 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Toaster } from "@/components/ui/toaster";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
-import { useToast } from "@/components/ui/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -26,13 +22,6 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { fetchBooks } from "./components/api";
-import { useEffect, useState } from "react";
-import { Button } from "./components/ui/button";
-import { Pencil, Trash2, Star, ChevronLeft, Save } from "lucide-react";
-import { ThemeProvider } from "@/components/theme-provider";
-import { ScrollArea } from "./components/ui/scroll-area";
-import { Plus, Filter } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,13 +29,33 @@ import {
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Toaster } from "@/components/ui/toaster";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
+import { useToast } from "@/components/ui/use-toast";
+import { fetchBooks } from "./components/api";
+import { useEffect, useState } from "react";
+import { Button } from "./components/ui/button";
+import { Pencil, Trash2, Star, ChevronLeft, Save } from "lucide-react";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ScrollArea } from "./components/ui/scroll-area";
+import { Plus, Filter } from "lucide-react";
 import { Input } from "./components/ui/input";
 import { Label } from "./components/ui/label";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 function App() {
-  const [showAll, setShowAll] = useState<boolean>(true);
-  const [showActive, setShowActive] = useState<boolean>(false);
+  const [showAll, setShowAll] = useState<boolean>(false);
+  const [showActive, setShowActive] = useState<boolean>(true);
   const [showDeactivated, setShowDeactivated] = useState<boolean>(false);
   const [books, setBooks] = useState([]);
   const [titleAdd, setTitleAdd] = useState<string>("");
@@ -63,10 +72,8 @@ function App() {
   const [isbnError, setISBNError] = useState<boolean>(false);
   const [btnAdd, setBtnAdd] = useState<boolean>(false);
   const [btnEdit, setBtnEdit] = useState<boolean>(false);
-
   const [filteredBooksNumber, setFilteredBooksNumber] = useState<number>(0);
   const [booksNumber, setBooksNumber] = useState<number>(0);
-
   const { toast } = useToast();
 
   const handleShowAllClick = () => {
@@ -89,6 +96,7 @@ function App() {
 
   useEffect(() => {
     setFilteredBooksNumber(filteredBooks.length);
+    setBooksNumber(books.length);
   }, [showActive, showDeactivated, showAll, books]);
 
   useEffect(() => {
@@ -443,7 +451,49 @@ function App() {
                   >
                     Category
                   </Label>
-                  <Input
+                  <Select>
+                    <SelectTrigger className="min-w-[180px] col-span-3">
+                      <SelectValue placeholder="Chose one from list" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <ScrollArea className="h-72 rounded-md ">
+                          <SelectItem value="fiction">Fiction</SelectItem>
+                          <SelectItem value="non-fiction">
+                            Non-Fiction
+                          </SelectItem>
+                          <SelectItem value="mystery">Mystery</SelectItem>
+                          <SelectItem value="fantasy">Fantasy</SelectItem>
+                          <SelectItem value="romance">Romance</SelectItem>
+                          <SelectItem value="science-fiction">
+                            Science Fiction
+                          </SelectItem>
+                          <SelectItem value="historical-fiction">
+                            Historical Fiction
+                          </SelectItem>
+                          <SelectItem value="biography">Biography</SelectItem>
+                          <SelectItem value="self-help">Self-Help</SelectItem>
+                          <SelectItem value="childrens">Children's</SelectItem>
+                          <SelectItem value="young-adult">
+                            Young Adult
+                          </SelectItem>
+                          <SelectItem value="thriller">Thriller</SelectItem>
+                          <SelectItem value="horror">Horror</SelectItem>
+                          <SelectItem value="poetry">Poetry</SelectItem>
+                          <SelectItem value="graphic-novel">
+                            Graphic Novel
+                          </SelectItem>
+                          <SelectItem value="philosophy">Philosophy</SelectItem>
+                          <SelectItem value="travel">Travel</SelectItem>
+                          <SelectItem value="cookbook">Cookbook</SelectItem>
+                          <SelectItem value="religion">Religion</SelectItem>
+                          <SelectItem value="history">History</SelectItem>
+                        </ScrollArea>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  {/* <Input
                     id="category"
                     value={categoryAdd}
                     className="col-span-3"
@@ -456,7 +506,7 @@ function App() {
                         setBtnAdd
                       );
                     }}
-                  />
+                  /> */}
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label
@@ -622,7 +672,6 @@ function App() {
                                 dashboard
                               </Button>
                             </DialogClose>
-                            
 
                             <Button
                               onClick={() =>
