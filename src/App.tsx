@@ -8,22 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-  CommandShortcut,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -54,7 +38,6 @@ import {
   SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
@@ -68,7 +51,6 @@ import {
   Star,
   ChevronLeft,
   Save,
-  ChevronUp,
 } from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollArea } from "./components/ui/scroll-area";
@@ -303,7 +285,7 @@ function App() {
           setTitleEdit("");
           setAuthorEdit("");
           setCategoryEdit("");
-          setISBNEdit("");
+          setISBNEdit();
 
           // Display a success notification to the user.
           toast({
@@ -481,15 +463,10 @@ const handleValidationInput = (
   };
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-<<<<<<< Updated upstream
-      <main className="grid grid-rows-[10rem_1fr_5rem] h-screen">
-        <header className=" flex flex-col md:flex-row justify-between items-center py-5 px-10">
-=======
       <main className="grid grid-rows-[10vh_85vh_5vh] h-screen">
         <header className=" flex justify-between items-center py-5 px-10">
->>>>>>> Stashed changes
           <div>
-            <h1 className="text-3xl font-black">Demo Book List</h1>
+            <h1 className="text-3xl font-bold">Demo Book List</h1>
             <h2>
               Showing {filteredBooksNumber} of <span>{booksNumber}</span>
             </h2>
@@ -685,18 +662,10 @@ const handleValidationInput = (
             </Dialog>
           </div>
         </header>
-<<<<<<< Updated upstream
-
-        <section className="flex flex-col w-full rounded-md border overflow-auto">
-
-          <ScrollArea  className=" w-full h-[68vh]">
-            <Table className="">
-=======
         <section>
           <ScrollArea className="rounded-md border p-4 w-full h-[84vh]">
             <Table>
->>>>>>> Stashed changes
-              <TableCaption>A list of books from fake DB.</TableCaption>
+              <TableCaption>End list of books from fake DB.</TableCaption>
               <TableHeader>
                 <TableRow>
                   <TableHead>Title</TableHead>
@@ -711,7 +680,7 @@ const handleValidationInput = (
               <TableBody>
                 {filteredBooks.map((books: any) => (
                   <TableRow key={books.id}>
-                    <TableCell>{books.title ? books.title : "-"}</TableCell>
+                    <TableCell className="font-medium">{books.title ? books.title : "-"}</TableCell>
                     <TableCell>{books.author ? books.author : "-"}</TableCell>
                     <TableCell>
                       {books.category ? books.category : "-"}
