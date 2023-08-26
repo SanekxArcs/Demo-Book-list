@@ -1,4 +1,8 @@
-
+import { useEffect, useState } from "react";
+import { Trash2, EyeOff, Eye } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
+import { fetchBooks, fetchCategories, API_URL_BOOKS } from "@/lib/api";
 import {
   Table,
   TableBody,
@@ -16,13 +20,8 @@ import {
 } from "@/components/ui/tooltip";
 import { Dialog } from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/toaster";
-import { v4 as uuidv4 } from "uuid";
-import moment from "moment";
 import { useToast } from "@/components/ui/use-toast";
-import { fetchBooks, fetchCategories, API_URL_BOOKS } from "@/lib/api";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Trash2, EyeOff, Eye } from "lucide-react";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import EditBook from "./components/EditBook";
@@ -59,12 +58,12 @@ const initialCategories: Categories = {
   Comics: ["error load"],
 };
 const clearBook = {
-  id: "error load",
-  title: "error load",
-  author: "error load",
-  category: "error load",
-  isbn: "error load",
-  createdAt: "error load",
+  id: "",
+  title: "",
+  author: "",
+  category: "",
+  isbn: "",
+  createdAt: "",
   modifiedAt: null,
   isActive: false,
 };
@@ -90,7 +89,7 @@ function App() {
     categoryError: true,
     isbnError: true,
   });
-
+  // Loadr books data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -114,7 +113,7 @@ function App() {
     setFilteredBooksNumber(filteredBooks.length);
     setBooksNumber(books.length);
   }, []);
-
+  // Loadr categories data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -143,7 +142,7 @@ function App() {
 
     fetchData();
   }, []);
-
+  // use filter, default option: show only active.
   const filteredBooks = books.filter((book) => {
     if (filterBtn.all) {
       return true;
@@ -151,14 +150,16 @@ function App() {
 
     return filterBtn.active ? book.isActive : !book.isActive;
   });
-
+  // update UI when Filtered Books are changed
   useEffect(() => {
     setFilteredBooksNumber(filteredBooks.length);
+  }, [filteredBooks]);
+  // update UI when Books are changed
+  useEffect(() => {
     setBooksNumber(books.length);
-    setBtnAdd(false);
-    setBtnEdit(false);
-
-
+  }, [books]);
+  // update UI when we adding book to check Errors
+  useEffect(() => {
     if (
       addBook.title.length > 2 &&
       addBook.author.length > 2 &&
@@ -166,7 +167,12 @@ function App() {
       addBook.isbn.length > 2
     ) {
       setBtnAdd(true);
+    } else {
+      setBtnAdd(false);
     }
+  }, [addBook]);
+  // update UI when we editing book to check Errors
+  useEffect(() => {
     if (
       editBook.title.length > 2 &&
       editBook.author.length > 2 &&
@@ -174,21 +180,26 @@ function App() {
       editBook.isbn.length > 2
     ) {
       setBtnEdit(true);
+    } else {
+      setBtnEdit(false);
     }
-  }, [books, filteredBooks, bookErrors]);
+  }, [editBook]);
 
+  // Filter Actions show: all, active or deactivated
+  // All
   const handleShowAllClick = () => {
     setFilterBtn({ all: true, active: false, deactivated: false });
   };
-
+  // Active
   const handleShowActiveClick = () => {
     setFilterBtn({ all: false, active: true, deactivated: false });
   };
-
+  // Deactivated
   const handleShowDeactivatedClick = () => {
     setFilterBtn({ all: false, active: false, deactivated: true });
   };
-
+  // Actions to Add book:
+  // Update the addBook state, validate
   const handleChangeAddBookState = (e: any) => {
     const { name, value } = e.target;
 
@@ -203,15 +214,19 @@ function App() {
       return { ...prev, [`${name}Error`]: isError }; // Use the dynamic key to set the error (e.g., titleError, authorError, etc.)
     });
   };
+  // Update the addBook state for categories, validate
   const handleAddCategory = (e: string) => {
+    // Update the addBook state
     setAddBooks((prev) => {
       return { ...prev, category: e };
     });
+    // Validate the input length and update the bookErrors state
     setBookErrors((prev) => {
       const isError = !e || e.length <= 2; // Check if the value is empty or its length is <= 3
       return { ...prev, [`categoryError`]: isError }; // Use the dynamic key to set the error (e.g., titleError, authorError, etc.)
     });
   };
+  // Validate and call function to send book to server
   const handleAddBook = () => {
     let errors = {
       titleError: addBook.title.length <= 2,
@@ -246,6 +261,7 @@ function App() {
       );
     }
   };
+  // Send book to server
   const handleAddBookToDB = async (
     titleDb: string,
     authorDb: string,
@@ -297,6 +313,8 @@ function App() {
     }
   };
 
+  // Actions to Edit book:
+  // Update the addBook state, validate
   const handleChangeEditBookState = (e: any) => {
     const { name, value } = e.target;
 
@@ -311,6 +329,7 @@ function App() {
       return { ...prev, [`${name}Error`]: isError }; // Use the dynamic key to set the error (e.g., titleError, authorError, etc.)
     });
   };
+  // Update the editBook state for categories, validate
   const handleEditCategory = (e: string) => {
     setEditBook((prev) => {
       return { ...prev, category: e };
@@ -320,6 +339,7 @@ function App() {
       return { ...prev, [`categoryError`]: isError }; // Use the dynamic key to set the error (e.g., titleError, authorError, etc.)
     });
   };
+  // Validate and call function to send edited book to server
   const handleEditBook = () => {
     let errors = {
       titleError: editBook.title.length <= 2,
@@ -356,6 +376,7 @@ function App() {
       );
     }
   };
+  // Send edited book to server
   const handleEditBookToDB = async (
     bookId: string,
     tit: string,
@@ -366,7 +387,6 @@ function App() {
     // Check if the 'btnEdit' state (or variable) is true before proceeding.
     if (btnEdit) {
       try {
-
         // Construct an edited book object with the provided parameters.
         const editBook = {
           id: bookId,
@@ -417,7 +437,7 @@ function App() {
       }
     }
   };
-
+  // Delete a book from DB ( work only when book deactivated )
   const handleDeleteClick = async (bookId: string) => {
     try {
       // Send a DELETE request to the backend to remove the book with the specified ID.
@@ -452,7 +472,7 @@ function App() {
       console.error("Error deleting book:", error);
     }
   };
-
+  // Toogle status of the book: active or deactivated
   const handleToggleActive = async (bookId: string) => {
     // Start a try block to catch potential errors during the async operations.
     try {
@@ -520,7 +540,6 @@ function App() {
               Showing {filteredBooksNumber} of <span>{booksNumber}</span>
             </h2>
           </div>
-
           <div className="flex gap-5">
             {/* Dropdown filter */}
             <FilterBTN
@@ -543,6 +562,8 @@ function App() {
             />
           </div>
         </header>
+
+        {/* Section with a table */}
         <section>
           <ScrollArea className="rounded-md border p-4 w-full h-[74svh]">
             <Table>
@@ -590,8 +611,8 @@ function App() {
                         setEditBook={setEditBook}
                         setBookErrors={setBookErrors}
                       />
-                      {/* Add to active  */}
 
+                      {/* Add to active  */}
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>

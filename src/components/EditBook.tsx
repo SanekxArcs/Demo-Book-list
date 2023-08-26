@@ -104,6 +104,7 @@ const EditBook: React.FC<EditBookProps> = ({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
+                {/* When button clicked set all data from the book to inputs and reset errors state, and open modal  */}
                 <Button
                   onClick={() => {
                     setEditBook({
