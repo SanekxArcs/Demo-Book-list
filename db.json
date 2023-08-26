@@ -1,16 +1,6 @@
 {
   "books": [
     {
-      "id": 1,
-      "title": "Journey Through Time",
-      "author": "Alex Turner",
-      "category": "Science Fiction",
-      "isbn": "9781234567890",
-      "createdAt": "2023-08-24T10:00:00.000Z",
-      "modifiedAt": null,
-      "isActive": false
-    },
-    {
       "id": 2,
       "title": "Echoes of Silence",
       "author": "Sarah Mitchell",
@@ -38,7 +28,7 @@
       "isbn": "9788765432109",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 6,
@@ -98,7 +88,7 @@
       "isbn": "9780123456781",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 12,
@@ -108,7 +98,7 @@
       "isbn": "9781234567892",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 13,
@@ -118,7 +108,7 @@
       "isbn": "9782345678901",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 14,
@@ -158,7 +148,7 @@
       "isbn": "9786789012345",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 18,
@@ -168,7 +158,7 @@
       "isbn": "9787890123456",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 19,
@@ -178,7 +168,7 @@
       "isbn": "9788901234567",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": 20,
@@ -188,7 +178,7 @@
       "isbn": "9789012345678",
       "createdAt": "2023-08-24T10:00:00.000Z",
       "modifiedAt": null,
-      "isActive": false
+      "isActive": true
     },
     {
       "id": "19401f60-f33e-41bd-965c-a83bda374898",
@@ -217,6 +207,296 @@
       "category": "Fantasy",
       "isbn": "3243243242",
       "createdAt": "25th August 2023, 04:42, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "c39ec7bc-4f78-424c-9aaa-72e9b23c645d",
+      "title": "12",
+      "author": "12",
+      "category": "Mystery",
+      "isbn": "12",
+      "createdAt": "25th August 2023, 10:48, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "9c4636a2-6924-41e5-85fe-3723cae3b9bd",
+      "title": "12",
+      "author": "12",
+      "category": "Mystery",
+      "isbn": "12",
+      "createdAt": "25th August 2023, 10:48, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "cf4b7ef2-fc21-4214-9b01-b8a8b74ed014",
+      "title": "12",
+      "author": "12",
+      "category": "Mystery",
+      "isbn": "12",
+      "createdAt": "25th August 2023, 10:49, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "040fb1ff-d035-4b0e-9ba0-f7268120a275",
+      "title": "12",
+      "author": "12",
+      "category": "Mystery",
+      "isbn": "12",
+      "createdAt": "25th August 2023, 10:49, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "1ef2fc5d-500f-4fc2-ac47-a01e1524c1a6",
+      "title": "12",
+      "author": "12",
+      "category": "Mystery",
+      "isbn": "12",
+      "createdAt": "25th August 2023, 10:50, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "806c5c75-7474-48a8-8f58-f0712bd9a8ad",
+      "title": "werwer",
+      "author": "234234",
+      "category": "Thriller",
+      "isbn": "werwerwer",
+      "createdAt": "25th August 2023, 10:58, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "28fb3b53-3d14-4674-a542-5ff0f3080e7b",
+      "title": "123123",
+      "author": "qweqwe",
+      "category": "Historical",
+      "isbn": "12312312",
+      "createdAt": "25th August 2023, 11:00, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "1e5843fb-c102-47d1-ad37-9f9758255fde",
+      "title": "",
+      "author": "",
+      "category": "Mystery",
+      "isbn": "",
+      "createdAt": "25th August 2023, 11:01, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "edbb8451-846a-4cf7-9914-5be3bd8a4137",
+      "title": "gdfgdf",
+      "author": "dfgdfg",
+      "category": "Graphic Novels",
+      "isbn": "gdfgdfg",
+      "createdAt": "25th August 2023, 11:35, pm",
+      "modifiedAt": null,
+      "isActive": true
+    },
+    {
+      "id": "9625672b-18e0-442b-94bc-a577b056b8c6",
+      "title": "asda",
+      "author": "asdas",
+      "category": "Historical",
+      "isbn": "asdasd",
+      "createdAt": "25th August 2023, 11:39, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "32392da9-e440-4a44-aaec-c98d2ad2685e",
+      "title": "wqeqwe",
+      "author": "qweqwe",
+      "category": "Literary",
+      "isbn": "qweqweqwe",
+      "createdAt": "25th August 2023, 11:39, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "44513a71-ce9a-4449-8845-e7dcc948f61b",
+      "title": "qweqwe",
+      "author": "qweqwe",
+      "category": "History",
+      "isbn": "qweqwe",
+      "createdAt": "25th August 2023, 11:40, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "2764f34f-dc5e-417c-a56f-b82bf4545214",
+      "title": "123",
+      "author": "qweqwe",
+      "category": "Mystery",
+      "isbn": "qweq123123",
+      "createdAt": "25th August 2023, 11:43, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "a88c414a-ca59-4512-be56-2ac85dd05e73",
+      "title": "asdasd",
+      "author": "asdasd",
+      "category": "Thriller",
+      "isbn": "213123123123123123",
+      "createdAt": "25th August 2023, 11:56, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "cfa47218-e697-4664-8ee2-77aa7ba4e2f1",
+      "title": "asdasd",
+      "author": "asdasd",
+      "category": "Mystery",
+      "isbn": "asdasd",
+      "createdAt": "26th August 2023, 12:02, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "7c1c3989-eb20-4586-8b6a-5ab7839c670e",
+      "title": "qwe",
+      "author": "23424",
+      "category": "Mystery",
+      "isbn": "234234",
+      "createdAt": "26th August 2023, 12:07, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "2d5b1e2e-f68e-4776-a0bd-be4716f4a2f7",
+      "title": "234234",
+      "author": "234234",
+      "category": "Historical",
+      "isbn": "234234234",
+      "createdAt": "26th August 2023, 12:07, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "8c5b7f7e-100e-4f8b-b55f-2c0b34e2430c",
+      "title": "234234",
+      "author": "234234",
+      "category": "Literary",
+      "isbn": "234234234234",
+      "createdAt": "26th August 2023, 12:07, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "20a72563-b713-4483-9dc7-24f7e47a3e52",
+      "title": "234234",
+      "author": "234234",
+      "category": "Mystery",
+      "isbn": "234234234",
+      "createdAt": "26th August 2023, 12:07, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "ce116fea-879e-4fb7-9ae2-be13f18223c5",
+      "title": "234234",
+      "author": "234234",
+      "category": "Journal",
+      "isbn": "324234234",
+      "createdAt": "26th August 2023, 12:08, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "b89c3c15-52d6-4584-a6ab-6c6ee69d126a",
+      "title": "324234",
+      "author": "234234",
+      "category": "Thriller",
+      "isbn": "23423e23de",
+      "createdAt": "26th August 2023, 12:09, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "9b3d69b3-d5a3-4f62-8713-62a624d49b2e",
+      "title": "sdfsdf",
+      "author": "sdfsdf",
+      "category": "Science Fiction",
+      "isbn": "sdfsdf",
+      "createdAt": "26th August 2023, 12:11, am",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "6dbf0641-96b9-45cb-9425-7db5c480ed55",
+      "title": "asdas",
+      "author": "asdasd",
+      "category": "Mystery",
+      "isbn": "asd",
+      "createdAt": "26th August 2023, 01:22, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "08a11cf6-a3e6-4240-b29b-6827da77f0b2",
+      "title": "sadsad",
+      "author": "asdasd",
+      "category": "Mystery",
+      "isbn": "asdasdwa",
+      "createdAt": "26th August 2023, 01:23, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "ce98ddf4-ca84-4a0f-800d-37ce01873ded",
+      "title": "werwer",
+      "author": "werwer",
+      "category": "Mystery",
+      "isbn": "23423423423",
+      "createdAt": "26th August 2023, 02:07, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "9d8b45b7-14b5-4ad6-9240-f5170643a6e6",
+      "title": "aaa",
+      "author": "aaa",
+      "category": "Mystery",
+      "isbn": "aaa",
+      "createdAt": "26th August 2023, 02:56, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "61ce03c8-5ec0-42be-84f3-a35aeb4781a7",
+      "title": "sdfs",
+      "author": "qwewqe",
+      "category": "Mystery",
+      "isbn": "213123",
+      "createdAt": "26th August 2023, 02:57, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "dfcc873e-9c81-4a67-8526-63fc5659472a",
+      "title": "kml",
+      "author": "kmlk",
+      "category": "Mystery",
+      "isbn": "mkm",
+      "createdAt": "26th August 2023, 02:59, pm",
+      "modifiedAt": null,
+      "isActive": false
+    },
+    {
+      "id": "14055910-8b6c-4788-8151-d59b3fbbb5e2",
+      "title": "aasd",
+      "author": "asdas",
+      "category": "Mystery",
+      "isbn": "asdasd",
+      "createdAt": "26th August 2023, 03:01, pm",
       "modifiedAt": null,
       "isActive": false
     }
