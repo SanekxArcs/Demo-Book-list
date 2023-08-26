@@ -22,6 +22,10 @@ Check out the live project on Netlify: [Demo Book List App](https://main--demo-b
 
 Please note that there might be issues with loading books from server on the live demo.
 
+
+[![Watch the video](https://github.com/SanekxArcs/Demo-Book-list/blob/main/src/assets/screenshot.png?raw=true)](https://github.com/SanekxArcs/Demo-Book-list/blob/main/src/assets/video.mp4)
+
+
 ## Description
 
 This application is a React-based solution for managing a list of books. It allows users to perform various operations such as adding new books, editing existing ones, and managing the status of books (active or deactivated). The application is designed with user-friendly features and a responsive layout.
