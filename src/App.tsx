@@ -40,21 +40,24 @@ interface Book {
   modifiedAt: string | null;
   isActive: boolean;
 }
-interface Categories {
-  Fiction: string[];
-  "Non-Fiction": string[];
-  Children: string[];
-  Poetry: string[];
-  Classics: string[];
-  Religious: string[];
-  Academic: string[];
-  Comics: string[];
-}
+type Categories = Record<string, string[]>;
+
 interface FilterBtn {
   all: boolean;
   active: boolean;
   deactivated: boolean;
 }
+
+const initialCategories: Categories = {
+  Fiction: ["error load"],
+  "Non-Fiction": ["error load"],
+  Children: ["error load"],
+  Poetry: ["error load"],
+  Classics: ["error load"],
+  Religious: ["error load"],
+  Academic: ["error load"],
+  Comics: ["error load"],
+};
 const clearBook = {
   id: "",
   title: "",
@@ -62,7 +65,7 @@ const clearBook = {
   category: "",
   isbn: "",
   createdAt: "",
-  modifiedAt: "",
+  modifiedAt: null,
   isActive: true,
 };
 
@@ -75,9 +78,7 @@ function App() {
   const [btnEdit, setBtnEdit] = useState<boolean>(false);
   const [filteredBooksNumber, setFilteredBooksNumber] = useState<number>(0);
   const [booksNumber, setBooksNumber] = useState<number>(0);
-  const [categories, setCategories] = useState<Categories[]>({
-    "Loading Book": ["Loading Book", "Loading Book 1"],
-  });
+  const [categories, setCategories] = useState<Categories>(initialCategories);
   const [filterBtn, setFilterBtn] = useState<FilterBtn>({
     all: false,
     active: true,
@@ -122,7 +123,16 @@ function App() {
         setCategories(categoriesData);
       } catch (error) {
         console.error("Error fetching categoies:", error);
-
+        setCategories({
+          Fiction: ["error load"],
+          "Non-Fiction": ["error load"],
+          Children: ["error load"],
+          Poetry: ["error load"],
+          Classics: ["error load"],
+          Religious: ["error load"],
+          Academic: ["error load"],
+          Comics: ["error load"],
+        });
         toast({
           variant: "destructive",
           title: `Error fetching categoies.`,
@@ -179,7 +189,7 @@ function App() {
     setFilterBtn({ all: false, active: false, deactivated: true });
   };
 
-  const handleChangeAddBookState = (e) => {
+  const handleChangeAddBookState = (e: any) => {
     const { name, value } = e.target;
 
     // Update the addBook state
@@ -287,7 +297,7 @@ function App() {
     }
   };
 
-  const handleChangeEditBookState = (e) => {
+  const handleChangeEditBookState = (e: any) => {
     const { name, value } = e.target;
 
     // Update the EditBook state
@@ -576,6 +586,7 @@ function App() {
                         handleEditCategory={handleEditCategory}
                         handleEditBook={handleEditBook}
                         btnEdit={btnEdit}
+                        // @ts-ignore
                         setEditBook={setEditBook}
                         setBookErrors={setBookErrors}
                       />

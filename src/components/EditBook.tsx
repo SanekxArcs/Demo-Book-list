@@ -30,8 +30,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 interface Book {
-  category: string;
-}
+    id: string;
+    title: string;
+    author: string;
+    category: string;
+    isbn: string;
+    createdAt: string;
+    modifiedAt: string | null;
+    isActive: boolean;
+  }
 
 interface EditBookProps {
   editBook: {
@@ -56,22 +63,26 @@ interface EditBookProps {
   handleEditCategory: (e: string) => void;
   handleEditBook: () => void;
   btnEdit: boolean;
-  setEditBook: {
-    id: string;
-    title: string;
-    author: string;
-    category: string;
-    isbn: string;
-    createdAt: string;
-    modifiedAt: string | null;
-    isActive: boolean;
-  };
-  setBookErrors: {
-    titleError: true;
-    authorError: true;
-    categoryError: true;
-    isbnError: true;
-  };
+  setEditBook: React.Dispatch<
+    React.SetStateAction<{
+      id: string;
+      title: string;
+      author: string;
+      category: string;
+      isbn: string;
+      createdAt: string;
+      modifiedAt: string;
+      isActive: boolean;
+    }>
+  >;
+  setBookErrors: React.Dispatch<
+    React.SetStateAction<{
+      titleError: boolean;
+      authorError: boolean;
+      categoryError: boolean;
+      isbnError: boolean;
+    }>
+  >;
 }
 
 const EditBook: React.FC<EditBookProps> = ({
@@ -102,7 +113,7 @@ const EditBook: React.FC<EditBookProps> = ({
                       category: books.category,
                       isbn: books.isbn,
                       createdAt: books.createdAt,
-                      modifiedAt: books.modifiedAt,
+                      modifiedAt: books.modifiedAt || "-",
                       isActive: books.isActive,
                     });
                     setBookErrors({

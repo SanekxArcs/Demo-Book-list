@@ -13,9 +13,9 @@ interface FilterBTNProps {
   all: boolean;
   active: boolean;
   deactivated: boolean;
-  onShowAllClick: () => void;
-  onShowActiveClick: () => void;
-  onShowDeactivatedClick: () => void;
+  handleShowAllClick: () => void;
+  handleShowActiveClick: () => void;
+  handleShowDeactivatedClick: () => void;
 }
 
 const FilterBTN: React.FC<FilterBTNProps> = ({
