@@ -59,14 +59,14 @@ const initialCategories: Categories = {
   Comics: ["error load"],
 };
 const clearBook = {
-  id: "",
-  title: "",
-  author: "",
-  category: "",
-  isbn: "",
-  createdAt: "",
+  id: "error load",
+  title: "error load",
+  author: "error load",
+  category: "error load",
+  isbn: "error load",
+  createdAt: "error load",
   modifiedAt: null,
-  isActive: true,
+  isActive: false,
 };
 
 function App() {
