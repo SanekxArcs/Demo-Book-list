@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { Trash2, EyeOff, Eye } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
@@ -200,7 +200,7 @@ function App() {
   };
   // Actions to Add book:
   // Update the addBook state, validate
-  const handleChangeAddBookState = (e: any) => {
+  const handleChangeAddBookState = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     // Update the addBook state
@@ -315,7 +315,7 @@ function App() {
 
   // Actions to Edit book:
   // Update the addBook state, validate
-  const handleChangeEditBookState = (e: any) => {
+  const handleChangeEditBookState = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     // Update the EditBook state
@@ -580,7 +580,7 @@ function App() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredBooks.map((books: any) => (
+                {filteredBooks.map((books: Book) => (
                   <TableRow key={books.id}>
                     <TableCell className="font-medium">
                       {books.title ? books.title : "-"}
@@ -607,7 +607,6 @@ function App() {
                         handleEditCategory={handleEditCategory}
                         handleEditBook={handleEditBook}
                         btnEdit={btnEdit}
-                        // @ts-ignore
                         setEditBook={setEditBook}
                         setBookErrors={setBookErrors}
                       />

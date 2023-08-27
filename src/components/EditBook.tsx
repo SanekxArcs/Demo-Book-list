@@ -63,18 +63,8 @@ interface EditBookProps {
   handleEditCategory: (e: string) => void;
   handleEditBook: () => void;
   btnEdit: boolean;
-  setEditBook: React.Dispatch<
-    React.SetStateAction<{
-      id: string;
-      title: string;
-      author: string;
-      category: string;
-      isbn: string;
-      createdAt: string;
-      modifiedAt: string;
-      isActive: boolean;
-    }>
-  >;
+  setEditBook: React.Dispatch<React.SetStateAction<Book>>;
+
   setBookErrors: React.Dispatch<
     React.SetStateAction<{
       titleError: boolean;
