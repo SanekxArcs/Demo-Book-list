@@ -1,0 +1,28 @@
+{
+  "Fiction": [
+    "Literary",
+    "Mystery",
+    "Thriller",
+    "Historical",
+    "Romance",
+    "Science Fiction",
+    "Fantasy",
+    "Horror"
+  ],
+  "Non - Fiction": [
+    "Biography",
+    "Memoir",
+    "Self-help",
+    "Health",
+    "True Crime",
+    "History",
+    "Science",
+    "Travel"
+  ],
+  "Children": ["Picture Books", "Middle Grade", "Young Adult"],
+  "Poetry": ["Contemporary", "Classic", "Epic", "Narrative", "Haiku"],
+  "Classics": ["Ancient", "Medieval", "Renaissance", "Modern"],
+  "Religious": ["Christianity", "Islam", "Hinduism", "Buddhism", "Judaism"],
+  "Academic": ["Textbook", "Research", "Journal"],
+  "Comics": ["Superhero", "Fantasy", "Manga", "Graphic Novels"]
+}

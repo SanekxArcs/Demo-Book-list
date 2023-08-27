@@ -1,0 +1,212 @@
+[
+  {
+    "id": "d5a07319-2e95-49cd-9338-b40830e37851",
+    "title": "Stirring Shadows",
+    "author": "Ava Carter",
+    "category": "Horror",
+    "isbn": "9789012345678",
+    "createdAt": "26th August 2023, 05:08, pm",
+    "modifiedAt": "27 August 2023, 11:54 pm",
+    "isActive": true
+  },
+  {
+    "id": "f0a24562-7c8b-41c0-8b1a-09f25aa394d4",
+    "title": "Whispers in the Attic",
+    "author": "Emma Thompson",
+    "category": "Horror",
+    "isbn": "9789012345679",
+    "createdAt": "26th August 2023, 05:12, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "3e33c61b-1a48-4aae-8a31-5b17d084510c",
+    "title": "Echoes of the Abyss",
+    "author": "James Miller",
+    "category": "Horror",
+    "isbn": "9789012345680",
+    "createdAt": "26th August 2023, 05:15, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "8e3c6c3b-aa5b-4c17-b9ea-77cda1d482bb",
+    "title": "Secrets in the Cellar",
+    "author": "Olivia Clark",
+    "category": "Mystery",
+    "isbn": "9789012345681",
+    "createdAt": "26th August 2023, 05:18, pm",
+    "modifiedAt": "26 August 2023, 05:15 pm",
+    "isActive": true
+  },
+  {
+    "id": "628d234b-d5d9-4ef7-9fe3-b29d3d9e41a6",
+    "title": "Chronicles of Time",
+    "author": "Sophia Martinez",
+    "category": "Historical",
+    "isbn": "9789012345683",
+    "createdAt": "26th August 2023, 05:24, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "ae6eb22e-3943-4bf6-aa44-6c1a0700a7da",
+    "title": "Ep555gfytutyuty",
+    "author": "Isabella Adams",
+    "category": "Romance",
+    "isbn": "9789012345684",
+    "createdAt": "26th August 2023, 05:27, pm",
+    "modifiedAt": "26 August 2023, 05:17 pm",
+    "isActive": false
+  },
+  {
+    "id": "7f40e90e-25b6-41dd-81d2-c95c6e5ef9a6",
+    "title": "Voyage to the Stars",
+    "author": "David Wilson",
+    "category": "Science Fiction",
+    "isbn": "9789012345685",
+    "createdAt": "26th August 2023, 05:30, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "9f4b2d72-593b-4212-aa05-75e91bf80509",
+    "title": "Realm of Legends",
+    "author": "Benjamin Foster",
+    "category": "Fantasy",
+    "isbn": "9789012345686",
+    "createdAt": "26th August 2023, 05:33, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "0ce50919-4620-47e8-8ff9-88b0a21882bc",
+    "title": "Cursed Chronicles",
+    "author": "Evelyn Turner",
+    "category": "Horror",
+    "isbn": "9789012345687",
+    "createdAt": "26th August 2023, 05:36, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "2185dfaf-c186-46b3-871e-0b9a1766fc5d",
+    "title": "Unraveled Secrets",
+    "author": "Nathan White",
+    "category": "Mystery",
+    "isbn": "9789012345688",
+    "createdAt": "26th August 2023, 05:39, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "91d48a36-5e23-49c0-aa51-cf3ad5e6b88f",
+    "title": "Beyond Tomorrow",
+    "author": "Emily Parker",
+    "category": "Science Fiction",
+    "isbn": "9789012345689",
+    "createdAt": "26th August 2023, 05:42, pm",
+    "modifiedAt": "26 August 2023, 05:15 pm",
+    "isActive": true
+  },
+  {
+    "id": "7e889cbc-6c5f-4c87-bafe-bb2db16eb7ef",
+    "title": "Enchanted Ever After",
+    "author": "Grace Foster",
+    "category": "Fantasy",
+    "isbn": "9789012345690",
+    "createdAt": "26th August 2023, 05:45, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "0a794b08-98ab-4800-aa33-17e8055934da",
+    "title": "Puzzles of the Mind",
+    "author": "Daniel Harris",
+    "category": "Mystery",
+    "isbn": "9789012345691",
+    "createdAt": "26th August 2023, 05:48, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "0eae787b-ba6f-409e-bf3d-b5d168e26e3a",
+    "title": "Wonders of the Cosmos",
+    "author": "Sophie Turner",
+    "category": "Science",
+    "isbn": "9789012345692",
+    "createdAt": "26th August 2023, 05:51, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "bd4b15ca-5f36-4e4b-9e36-b3ca96acbdbb",
+    "title": "Quest for Eldoria",
+    "author": "Liam O'Connor",
+    "category": "Fantasy",
+    "isbn": "9789012345693",
+    "createdAt": "26th August 2023, 05:54, pm",
+    "modifiedAt": null,
+    "isActive": true
+  },
+  {
+    "id": "4d34d1c9-08f3-4f1b-aa6f-fd3322db0c83",
+    "title": "Serenity's Song",
+    "author": "Emma Walker",
+    "category": "Romance",
+    "isbn": "9789012345694",
+    "createdAt": "26th August 2023, 05:57, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "1846f14b-8253-48ea-aa76-223a8f84b378",
+    "title": "Journey to Redemption",
+    "author": "David Smith",
+    "category": "Religious",
+    "isbn": "9789012345695",
+    "createdAt": "26th August 2023, 06:00, pm",
+    "modifiedAt": "27 August 2023, 11:55 pm",
+    "isActive": true
+  },
+  {
+    "id": "17331b79-2890-4ad9-88a3-0d62ff442ebd",
+    "title": "Curious Curiosities",
+    "author": "Isaac Johnson",
+    "category": "History",
+    "isbn": "9789012345696",
+    "createdAt": "26th August 2023, 06:03, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "df585a14-c82d-466d-bdb6-b0a9369b7a6f",
+    "title": "Uncharted Realms",
+    "author": "Sarah Martin",
+    "category": "Fantasy",
+    "isbn": "9789012345697",
+    "createdAt": "26th August 2023, 06:06, pm",
+    "modifiedAt": "26 August 2023, 05:15 pm",
+    "isActive": true
+  },
+  {
+    "id": "cdabb1ff-1704-4c24-bf6c-41ec1b32e5b0",
+    "title": "aaaaa",
+    "author": "trst",
+    "category": "Historical",
+    "isbn": "trst",
+    "createdAt": "26th August 2023, 05:17, pm",
+    "modifiedAt": null,
+    "isActive": false
+  },
+  {
+    "id": "cd08aa61-dfdd-493a-a3f4-af9949001463",
+    "title": "aqweqweq",
+    "author": "dasdasd",
+    "category": "Mystery",
+    "isbn": "wqeqweqw",
+    "createdAt": "26th August 2023, 05:51, pm",
+    "modifiedAt": null,
+    "isActive": false
+  }
+]

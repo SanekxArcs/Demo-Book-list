@@ -1,5 +1,5 @@
-export const API_URL_BOOKS = "http://192.168.0.212:5000/books";
-const API_URL_CATEGOIES = "http://192.168.0.212:5000/categories";
+export const API_URL_BOOKS = "https://www.solarsense.pl/books";
+const API_URL_CATEGOIES = "https://www.solarsense.pl/categories";
 
 export const fetchBooks = async () => {
   const response = await fetch(API_URL_BOOKS);
