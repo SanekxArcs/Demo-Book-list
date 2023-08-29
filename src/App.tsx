@@ -532,15 +532,15 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <main className="grid grid-rows-[20svh_75svh_5svh]  h-[100svh]">
-        <header className=" flex justify-between items-center py-5 px-10">
+      <main className="grid grid-rows-[20svh_75svh_5svh] h-[100svh]">
+        <header className="flex items-center justify-between gap-2 px-2 md:py-5 md:px-10 md:flex-row">
           <div>
-            <h1 className="text-3xl font-bold">Demo Book List</h1>
+            <h1 className="text-xl font-bold md:text-3xl">Demo Book List</h1>
             <h2>
               Showing {filteredBooksNumber} of <span>{booksNumber}</span>
             </h2>
           </div>
-          <div className="flex gap-5">
+          <div className="flex flex-col justify-end gap-5 smxl:flex-row">
             {/* Dropdown filter */}
             <FilterBTN
               all={filterBtn.all}
@@ -565,8 +565,8 @@ function App() {
 
         {/* Section with a table */}
         <section>
-          <ScrollArea className="rounded-md border p-4 w-full h-[74svh]">
-            <Table>
+          <ScrollArea className="rounded-md border p-4 w-[100svw] h-[74svh] overflow-x-auto">
+            <Table className="min-w-[1000px] md:min-w-full max-w-[100svw]">
               <TableCaption>End list of books from fake DB.</TableCaption>
               <TableHeader>
                 <TableRow>
@@ -581,7 +581,7 @@ function App() {
               </TableHeader>
               <TableBody>
                 {filteredBooks.map((books: Book) => (
-                  <TableRow key={books.id}>
+                  <TableRow className="text-xs md:text-sm" key={books.id}>
                     <TableCell className="font-medium">
                       {books.title ? books.title : "-"}
                     </TableCell>
@@ -640,21 +640,21 @@ function App() {
                       {/* Delete btn show when book.isActive: true */}
                       {books.isActive ? (
                         <Button disabled variant="outline" size="icon">
-                          <Trash2 className=" h-4 w-4" />
+                          <Trash2 className="w-4 h-4 " />
                         </Button>
                       ) : (
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <Button
-                                className="hover:text-red-500 text-red-200"
+                                className="text-red-200 hover:text-red-500"
                                 onClick={() => {
                                   handleDeleteClick(books.id);
                                 }}
                                 variant="outline"
                                 size="icon"
                               >
-                                <Trash2 className=" h-4 w-4 " />
+                                <Trash2 className="w-4 h-4 " />
                               </Button>
                             </TooltipTrigger>
                             <TooltipContent>
