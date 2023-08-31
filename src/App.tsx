@@ -565,7 +565,7 @@ function App() {
 
         {/* Section with a table */}
         <section>
-          <ScrollArea className="rounded-md border p-4 w-[100svw] h-[74svh] overflow-x-auto">
+          <ScrollArea className="rounded-md border w-[100svw] h-[74svh]">
             <Table>
               <TableCaption>End list of books from fake DB.</TableCaption>
               <TableHeader>
