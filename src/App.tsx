@@ -1,5 +1,5 @@
 import { useEffect, useState, ChangeEvent } from "react";
-import { Trash2, EyeOff, Eye } from "lucide-react";
+import { Trash2, EyeOff, Eye, Settings } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import { fetchBooks, fetchCategories, API_URL_BOOKS } from "@/lib/api";
@@ -12,6 +12,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
@@ -28,6 +36,9 @@ import EditBook from "./components/EditBook";
 import AddBook from "./components/AddBook";
 import FilterBTN from "./components/FilterBTN";
 import Footer from "./components/Footer";
+import { useBooks } from "./lib/useBooks";
+import { useCategories } from "./lib/useCategories";
+import { ModeToggle } from "./components/ui/mode-toggle";
 
 interface Book {
   id: string;
@@ -541,6 +552,7 @@ function App() {
             </h2>
           </div>
           <div className="flex flex-col justify-end gap-5 smxl:flex-row">
+
             {/* Dropdown filter */}
             <FilterBTN
               all={filterBtn.all}
@@ -560,7 +572,12 @@ function App() {
               handleAddBook={handleAddBook}
               btnAdd={btnAdd}
             />
-          </div>
+            <div className="hidden md:block">
+              <ModeToggle/>
+            </div>
+            
+          </div>            
+          
         </header>
 
         {/* Section with a table */}

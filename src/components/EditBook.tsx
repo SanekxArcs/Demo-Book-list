@@ -118,7 +118,7 @@ const EditBook: React.FC<EditBookProps> = ({
                   variant="outline"
                   size="icon"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <Pencil className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -135,7 +135,7 @@ const EditBook: React.FC<EditBookProps> = ({
               book on our servers.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="title"
               className={`${
@@ -153,7 +153,7 @@ const EditBook: React.FC<EditBookProps> = ({
               onChange={(e) => handleChangeEditBookState(e)}
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="author"
               className={`${
@@ -171,7 +171,7 @@ const EditBook: React.FC<EditBookProps> = ({
               onChange={(e) => handleChangeEditBookState(e)}
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="category"
               className="text-right"
@@ -215,7 +215,7 @@ const EditBook: React.FC<EditBookProps> = ({
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="isbn"
               className={`${
@@ -226,6 +226,7 @@ const EditBook: React.FC<EditBookProps> = ({
               ISBN
             </Label>
             <Input
+              type="number"
               id="isbn"
               name="isbn"
               value={editBook.isbn}
@@ -238,7 +239,7 @@ const EditBook: React.FC<EditBookProps> = ({
             <div className="flex justify-end gap-2">
               <DialogClose>
                 <Button variant="secondary">
-                  <ChevronLeft className="mr-2 h-4 w-4" /> Back to dashboard
+                  <ChevronLeft className="w-4 h-4 mr-2" /> Back to dashboard
                 </Button>
               </DialogClose>
               {!btnEdit ? (
@@ -247,13 +248,13 @@ const EditBook: React.FC<EditBookProps> = ({
                   onClick={() => handleEditBook()}
                   type="submit"
                 >
-                  <Save className="mr-2 h-4 w-4" />
+                  <Save className="w-4 h-4 mr-2" />
                   Save changes
                 </Button>
               ) : (
                 <DialogClose>
                   <Button onClick={() => handleEditBook()} type="submit">
-                    <Save className="mr-2 h-4 w-4" /> Save changes
+                    <Save className="w-4 h-4 mr-2" /> Save changes
                   </Button>
                 </DialogClose>
               )}
