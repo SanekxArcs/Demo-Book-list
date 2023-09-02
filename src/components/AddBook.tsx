@@ -62,7 +62,7 @@ const AddBook: React.FC<AddBookProps> = ({
       <Dialog>
         <DialogTrigger>
           <Button>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="w-4 h-4 mr-2" />
             Add Book
           </Button>
         </DialogTrigger>
@@ -73,7 +73,7 @@ const AddBook: React.FC<AddBookProps> = ({
               This action will add new book on our servers.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="title"
               className={`${
@@ -93,7 +93,7 @@ const AddBook: React.FC<AddBookProps> = ({
               }}
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="author"
               className={`${
@@ -114,7 +114,7 @@ const AddBook: React.FC<AddBookProps> = ({
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="category"
               className={`${
@@ -162,7 +162,7 @@ const AddBook: React.FC<AddBookProps> = ({
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
+          <div className="grid items-center grid-cols-4 gap-4">
             <Label
               htmlFor="isbn"
               className={`${
@@ -173,6 +173,7 @@ const AddBook: React.FC<AddBookProps> = ({
               ISBN
             </Label>
             <Input
+              type="number"
               id="isbn"
               name="isbn"
               value={addBook.isbn}
@@ -187,18 +188,22 @@ const AddBook: React.FC<AddBookProps> = ({
             <div className="flex justify-end gap-2">
               <DialogClose>
                 <Button variant="secondary">
-                  <ChevronLeft className="mr-2 h-4 w-4" /> Back to dashboard
+                  <ChevronLeft className="w-4 h-4 mr-2" /> Back to dashboard
                 </Button>
               </DialogClose>
               {!btnAdd ? (
-                <Button variant="ghost" onClick={() => handleAddBook()} type="submit">
-                  <Save className="mr-2 h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  onClick={() => handleAddBook()}
+                  type="submit"
+                >
+                  <Save className="w-4 h-4 mr-2" />
                   Add Book
                 </Button>
               ) : (
                 <DialogClose>
                   <Button onClick={() => handleAddBook()} type="submit">
-                    <Save className="mr-2 h-4 w-4" /> Add Book
+                    <Save className="w-4 h-4 mr-2" /> Add Book
                   </Button>
                 </DialogClose>
               )}
