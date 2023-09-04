@@ -153,7 +153,7 @@ export const BookProvider: React.FC<BookProviderProps> = ({ children }) => {
     };
 
     fetchData();
-  }, );
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -176,7 +176,7 @@ export const BookProvider: React.FC<BookProviderProps> = ({ children }) => {
     };
 
     fetchData();
-  }, );
+  }, []);
 
   useEffect(() => {
     if (Array.isArray(books)) {
